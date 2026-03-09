@@ -197,11 +197,7 @@ font-size:70px;
 margin-top:15px;
 font-weight:700;
 
-background:linear-gradient(90deg,#CBFE00,#9EDB00);
-
--webkit-background-clip:text;
-
-color:transparent;
+color:white;
 
 }
 
@@ -428,75 +424,180 @@ transform:translateY(0px);
 height:50px;
 }
 
+/* HERO SPLIT DESKTOP */
+
+.hero-container{
+display:grid;
+grid-template-columns:1fr 1fr;
+align-items:center;
+gap:80px;
+max-width:1200px;
+width:90%;
+margin:0 auto;
+}
+
+.hero-logo-right{
+width:200px;
+
+animation:floatLogo 5s ease-in-out infinite;
+
+filter:
+drop-shadow(0 0 10px rgba(203,254,0,0.4))
+drop-shadow(0 0 30px rgba(203,254,0,0.25));
+
+transition:0.4s;
+}
+
 /* ========================= */
 /* MOBILE */
 /* ========================= */
 
 @media(max-width:768px){
 
+/* HERO */
+
+.hero{
+height:auto;
+padding-top:120px;
+padding-bottom:60px;
+}
+
+/* GRID DEL HERO */
+
+.hero-container{
+display:grid;
+grid-template-columns:1fr;
+grid-template-rows:auto auto;
+justify-items:center;
+text-align:center;
+gap:30px;
+width:100%;
+}
+
+/* ORDEN ELEMENTOS */
+
+.hero-image{
+grid-row:1;
+display:flex;
+justify-content:center;
+align-items:center;
+width:100%;
+}
+
+.hero-text{
+grid-row:2;
+text-align:center;
+width:100%;
+max-width:600px;
+margin:0 auto;
+}
+
+/* TITULO */
+
 .hero h1{
 font-size:38px;
+line-height:1.2;
+text-align:center;
+margin:0 auto;
 }
+
+/* SUBTITULO */
 
 .hero p{
 font-size:16px;
+text-align:center;
+max-width:500px;
+margin:20px auto 0 auto;
 }
 
-.hero-logo{
-width:90px;
+/* LOGO */
+
+.hero-logo-right{
+width:180px;
+display:block;
+margin:0 auto;
+}
+
+/* BOTONES */
+
+.buttons{
+flex-direction:column;
+gap:12px;
+align-items:center;
 }
 
 /* NAVBAR */
 
 nav{
-
 top:15px;
-
 padding:10px 15px;
-
 width:90%;
 max-width:90%;
-
 }
 
 nav ul{
-
 gap:15px;
-
 flex-wrap:wrap;
-
 justify-content:center;
-
 }
 
 nav a{
-
 font-size:14px;
-
 padding:6px 10px;
-
-}
-
-/* BUTTONS */
-
-.buttons{
-flex-direction:column;
-gap:12px;
 }
 
 /* PROJECT GRID */
 
 .grid-cards{
-
 grid-template-columns:1fr;
-
 }
 
 section{
-
 padding:80px 20px;
+}
 
 }
+
+/* HERO SPLIT */
+
+
+
+.hero-text{
+text-align:left;
+}
+
+.hero-image{
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+
+/* animacion flotante */
+
+@keyframes floatLogo{
+
+0%{
+transform:translateY(0px) rotate(-2deg);
+}
+
+50%{
+transform:translateY(-18px) rotate(2deg);
+}
+
+100%{
+transform:translateY(0px) rotate(-2deg);
+}
+
+}
+
+.lime{
+
+color:#CBFE00;
+
+text-shadow:
+0 0 10px rgba(203,254,0,0.4),
+0 0 20px rgba(203,254,0,0.2);
 
 }
 
@@ -525,15 +626,34 @@ padding:80px 20px;
 
 <section class="hero">
 
-<img src="img/logo.png" class="hero-logo">
+<div class="hero-container">
 
-<h1>Jose Peñalba</h1>
-<p>Hardware Builder · Embedded Systems · Tech Products</p>
+<div class="hero-text">
+
+<h1>
+Hi, I'm <span class="lime">Jose</span><br>
+Embedded Systems Builder
+</h1>
+
+<p class="hero-desc">
+I design hardware and embedded systems for energy monitoring,
+industrial communication and real-world devices.
+</p>
 
 <div class="buttons">
 
 <a href="#" class="btn">View Projects</a>
 <a href="#" class="btn btn-outline">Contact</a>
+
+</div>
+
+</div>
+
+<div class="hero-image">
+
+<img src="img/logo.png" class="hero-logo-right">
+
+</div>
 
 </div>
 
