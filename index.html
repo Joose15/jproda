@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Jose Peñalba — Builder</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+
+font-family:'Inter',sans-serif;
+background:#050505;
+color:white;
+overflow-x:hidden;
+
+}
+
+/* ========================= */
+/* BACKGROUND ANIMADO */
+/* ========================= */
+
+.bg{
+
+position:fixed;
+width:100%;
+height:100%;
+z-index:-2;
+
+background:
+radial-gradient(circle at 20% 30%, #00ffe155, transparent 40%),
+radial-gradient(circle at 80% 70%, #0066ff55, transparent 40%),
+radial-gradient(circle at 50% 50%, #ff00ff33, transparent 50%);
+
+filter:blur(120px);
+
+animation:move 18s infinite alternate ease-in-out;
+
+}
+
+@keyframes move{
+
+0%{transform:translate(-10%, -10%) scale(1)}
+100%{transform:translate(10%, 10%) scale(1.2)}
+
+}
+
+/* GRID BACKGROUND */
+
+.grid{
+
+position:fixed;
+width:100%;
+height:100%;
+background-image:
+linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+
+background-size:40px 40px;
+
+z-index:-1;
+
+}
+
+/* ========================= */
+/* NAVBAR */
+/* ========================= */
+
+nav{
+
+position:fixed;
+
+width:100%;
+
+display:flex;
+
+justify-content:space-between;
+
+padding:25px 8%;
+
+backdrop-filter:blur(20px);
+
+background:rgba(0,0,0,0.3);
+
+border-bottom:1px solid rgba(255,255,255,0.05);
+
+z-index:10;
+
+}
+
+.logo{
+
+font-family:'Orbitron';
+letter-spacing:2px;
+
+}
+
+nav ul{
+
+display:flex;
+
+gap:35px;
+
+list-style:none;
+
+}
+
+nav a{
+
+color:white;
+text-decoration:none;
+opacity:0.7;
+transition:0.3s;
+
+}
+
+nav a:hover{
+
+opacity:1;
+
+}
+
+/* ========================= */
+/* HERO */
+/* ========================= */
+
+.hero{
+
+height:100vh;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+text-align:center;
+
+padding:0 20px;
+
+}
+
+.hero h1{
+
+font-size:70px;
+
+font-weight:700;
+
+background:linear-gradient(90deg,#00ffe1,#0077ff);
+
+-webkit-background-clip:text;
+
+color:transparent;
+
+}
+
+.hero p{
+
+margin-top:20px;
+
+font-size:22px;
+
+opacity:0.7;
+
+}
+
+.buttons{
+
+margin-top:40px;
+
+display:flex;
+
+gap:20px;
+
+}
+
+.btn{
+
+padding:14px 30px;
+
+border-radius:14px;
+
+background:linear-gradient(135deg,#00ffe1,#0077ff);
+
+color:black;
+
+font-weight:600;
+
+text-decoration:none;
+
+transition:0.4s;
+
+}
+
+.btn:hover{
+
+transform:translateY(-4px);
+
+box-shadow:0 10px 40px rgba(0,255,225,0.3);
+
+}
+
+.btn-outline{
+
+background:transparent;
+
+border:1px solid rgba(255,255,255,0.2);
+
+color:white;
+
+}
+
+/* ========================= */
+/* SECTION */
+/* ========================= */
+
+section{
+
+padding:120px 10%;
+
+}
+
+.title{
+
+font-size:40px;
+
+margin-bottom:60px;
+
+}
+
+/* ========================= */
+/* CARDS */
+/* ========================= */
+
+.grid-cards{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+
+gap:30px;
+
+}
+
+.card{
+
+padding:40px;
+
+border-radius:20px;
+
+background:rgba(255,255,255,0.03);
+
+border:1px solid rgba(255,255,255,0.05);
+
+backdrop-filter:blur(10px);
+
+transition:0.4s;
+
+}
+
+.card:hover{
+
+transform:translateY(-10px) scale(1.02);
+
+background:rgba(255,255,255,0.06);
+
+}
+
+/* ========================= */
+/* PROJECTS */
+/* ========================= */
+
+.project{
+
+overflow:hidden;
+
+border-radius:20px;
+
+background:rgba(255,255,255,0.03);
+
+border:1px solid rgba(255,255,255,0.05);
+
+transition:0.4s;
+
+}
+
+.project:hover{
+
+transform:scale(1.03);
+
+}
+
+.project-img{
+
+height:200px;
+
+background:linear-gradient(135deg,#00ffe133,#0077ff33);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:40px;
+
+}
+
+.project-content{
+
+padding:30px;
+
+}
+
+.project-content p{
+
+opacity:0.7;
+
+}
+
+/* ========================= */
+/* FOOTER */
+/* ========================= */
+
+footer{
+
+text-align:center;
+
+padding:60px;
+
+opacity:0.5;
+
+}
+
+.grid-cards{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:30px;
+
+}
+
+@media(max-width:900px){
+
+.grid-cards{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="bg"></div>
+<div class="grid"></div>
+
+<nav>
+
+<div class="logo">JP</div>
+
+<ul>
+
+<li><a href="#">About</a></li>
+<li><a href="#">Skills</a></li>
+<li><a href="#">Projects</a></li>
+<li><a href="#">Contact</a></li>
+
+</ul>
+
+</nav>
+
+<section class="hero">
+
+<h1>Jose Peñalba</h1>
+
+<p>Hardware Builder · Embedded Systems · Tech Products</p>
+
+<div class="buttons">
+
+<a href="#" class="btn">View Projects</a>
+<a href="#" class="btn btn-outline">Contact</a>
+
+</div>
+
+</section>
+
+
+<section>
+
+<h2 class="title">Relevant Projects</h2>
+
+<div class="grid-cards" id="projects-container"></div>
+
+</section>
+
+<footer>
+
+© 2026 Jose Peñalba
+
+</footer>
+
+<script>
+
+let allProjects = []
+let current = 0
+
+fetch("data/projects.json")
+.then(res => res.json())
+.then(projects => {
+
+allProjects = shuffle(projects)
+
+renderProjects()
+
+})
+.catch(error => {
+
+console.error("Error cargando proyectos:", error)
+
+})
+
+function renderProjects(){
+
+const container = document.getElementById("projects-container")
+
+container.innerHTML = ""
+
+const visible = allProjects.slice(current, current+3)
+
+visible.forEach(project => {
+
+const card = document.createElement("div")
+
+card.className = "project"
+
+card.innerHTML = `
+
+<a href="${project.file}" style="text-decoration:none;color:white">
+
+<div class="project-img">${project.icon}</div>
+
+<div class="project-content">
+<h3>${project.name}</h3>
+<p>View project</p>
+</div>
+
+</a>
+
+`
+
+container.appendChild(card)
+
+})
+
+}
+
+function shuffle(array){
+
+for (let i = array.length - 1; i > 0; i--) {
+
+const j = Math.floor(Math.random() * (i + 1))
+
+[array[i], array[j]] = [array[j], array[i]]
+
+}
+
+return array
+
+}
+
+document.getElementById("projects-container").addEventListener("click", () => {
+
+current += 3
+
+if(current >= allProjects.length){
+
+allProjects = shuffle(allProjects)
+
+current = 0
+
+}
+
+renderProjects()
+
+})
+
+</script>
+</body>
+
+</html>

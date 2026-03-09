@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Energy Monitoring",
+    "file": "projects/energy.html",
+    "icon": "⚡"
+  },
+  {
+    "name": "IoT Platform",
+    "file": "projects/iot.html",
+    "icon": "🤖"
+  },
+  {
+    "name": "Industrial Protocols",
+    "file": "projects/plc.html",
+    "icon": "📡"
+  }
+]
