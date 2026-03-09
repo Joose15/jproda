@@ -21,7 +21,7 @@ box-sizing:border-box;
 body{
 
 font-family:'Inter',sans-serif;
-background:#050505;
+background:#212121;
 color:white;
 overflow-x:hidden;
 
@@ -39,11 +39,11 @@ height:100%;
 z-index:-2;
 
 background:
-radial-gradient(circle at 20% 30%, #00ffe155, transparent 40%),
-radial-gradient(circle at 80% 70%, #0066ff55, transparent 40%),
-radial-gradient(circle at 50% 50%, #ff00ff33, transparent 50%);
+radial-gradient(circle at 20% 30%, #CBFE0033, transparent 40%),
+radial-gradient(circle at 80% 70%, #CBFE0040, transparent 40%),
+radial-gradient(circle at 50% 50%, #CBFE0025, transparent 50%);
 
-filter:blur(120px);
+filter:blur(140px);
 
 animation:move 18s infinite alternate ease-in-out;
 
@@ -81,21 +81,26 @@ nav{
 
 position:fixed;
 
-width:100%;
+top:25px;
+left:50%;
 
-display:flex;
+transform:translateX(-50%);
 
-justify-content:space-between;
-
-padding:25px 8%;
+background:rgba(0,0,0,0.6);
 
 backdrop-filter:blur(20px);
 
-background:rgba(0,0,0,0.3);
+border-radius:40px;
 
-border-bottom:1px solid rgba(255,255,255,0.05);
+padding:12px 25px;
 
-z-index:10;
+border:1px solid rgba(255,255,255,0.1);
+
+box-shadow:0 0 30px rgba(0,0,0,0.4);
+
+z-index:100;
+
+transition:0.4s;
 
 }
 
@@ -114,6 +119,30 @@ gap:35px;
 
 list-style:none;
 
+align-items:center;
+
+}
+
+nav a{
+
+color:#cfcfcf;
+
+text-decoration:none;
+
+font-size:16px;
+
+padding:8px 14px;
+
+border-radius:20px;
+
+transition:0.3s;
+
+}
+
+nav a:hover{
+
+color:#CBFE00;
+
 }
 
 nav a{
@@ -128,6 +157,15 @@ transition:0.3s;
 nav a:hover{
 
 opacity:1;
+
+}
+nav.scrolled{
+
+background:rgba(0,0,0,0.35);
+
+border:1px solid rgba(255,255,255,0.05);
+
+box-shadow:0 10px 40px rgba(0,0,0,0.5);
 
 }
 
@@ -156,10 +194,10 @@ padding:0 20px;
 .hero h1{
 
 font-size:70px;
-
+margin-top:15px;
 font-weight:700;
 
-background:linear-gradient(90deg,#00ffe1,#0077ff);
+background:linear-gradient(90deg,#CBFE00,#9EDB00);
 
 -webkit-background-clip:text;
 
@@ -193,9 +231,9 @@ padding:14px 30px;
 
 border-radius:14px;
 
-background:linear-gradient(135deg,#00ffe1,#0077ff);
+background:linear-gradient(135deg,#CBFE00,#9EDB00);
 
-color:black;
+color:#212121;
 
 font-weight:600;
 
@@ -209,9 +247,11 @@ transition:0.4s;
 
 transform:translateY(-4px);
 
-box-shadow:0 10px 40px rgba(0,255,225,0.3);
+box-shadow:0 10px 40px rgba(203,254,0,0.35);
 
 }
+
+
 
 .btn-outline{
 
@@ -245,16 +285,10 @@ margin-bottom:60px;
 /* CARDS */
 /* ========================= */
 
-.grid-cards{
 
-display:grid;
-
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-
-gap:30px;
-
+.project{
+cursor:pointer;
 }
-
 .card{
 
 padding:40px;
@@ -291,8 +325,7 @@ border-radius:20px;
 
 background:rgba(255,255,255,0.03);
 
-border:1px solid rgba(255,255,255,0.05);
-
+border:1px solid rgba(203,254,0,0.15);
 transition:0.4s;
 
 }
@@ -301,13 +334,15 @@ transition:0.4s;
 
 transform:scale(1.03);
 
+box-shadow:0 10px 35px rgba(203,254,0,0.2);
+
 }
 
 .project-img{
 
 height:200px;
 
-background:linear-gradient(135deg,#00ffe133,#0077ff33);
+background:linear-gradient(135deg,#CBFE0025,#CBFE0010);
 
 display:flex;
 
@@ -363,6 +398,42 @@ grid-template-columns:1fr;
 
 }
 
+.projects-more{
+margin-top:40px;
+display:flex;
+justify-content:center;
+}
+
+.hero-logo{
+
+width:120px;
+margin-bottom:0px;
+
+animation:float 4s ease-in-out infinite;
+
+}
+
+@keyframes float{
+
+0%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-10px);
+}
+
+100%{
+transform:translateY(0px);
+}
+
+}
+
+
+.nav-logo{
+height:50px;
+}
+
 </style>
 
 </head>
@@ -374,7 +445,6 @@ grid-template-columns:1fr;
 
 <nav>
 
-<div class="logo">JP</div>
 
 <ul>
 
@@ -389,8 +459,9 @@ grid-template-columns:1fr;
 
 <section class="hero">
 
-<h1>Jose Peñalba</h1>
+<img src="img/logo.png" class="hero-logo">
 
+<h1>Jose Peñalba</h1>
 <p>Hardware Builder · Embedded Systems · Tech Products</p>
 
 <div class="buttons">
@@ -407,7 +478,11 @@ grid-template-columns:1fr;
 
 <h2 class="title">Relevant Projects</h2>
 
-<div class="grid-cards" id="projects-container"></div>
+<div id="projects-container" class="grid-cards"></div>
+
+<div class="projects-more">
+<a href="projects/projects.html" class="btn">View More Projects</a>
+</div>
 
 </section>
 
@@ -417,54 +492,36 @@ grid-template-columns:1fr;
 
 </footer>
 
+<script src="data/projects.js"></script>
+
 <script>
-
-let allProjects = []
-let current = 0
-
-fetch("data/projects.json")
-.then(res => res.json())
-.then(projects => {
-
-allProjects = shuffle(projects)
-
-renderProjects()
-
-// activar click después de cargar
-document.getElementById("projects-container")
-.addEventListener("click", nextProjects)
-
-})
-.catch(err => console.error(err))
-
-
-function renderProjects(){
 
 const container = document.getElementById("projects-container")
 
-container.innerHTML = ""
-
-if(allProjects.length === 0) return
-
-const visible = []
-
-for(let i = 0; i < 3; i++){
-visible.push(allProjects[(current + i) % allProjects.length])
+function shuffle(array) {
+  return [...array].sort(() => Math.random() - 0.5)
 }
 
-visible.forEach(project => {
+function renderProjects(){
+
+container.innerHTML = ""
+
+const randomProjects = shuffle(projects).slice(0,3)
+
+randomProjects.forEach(project => {
 
 const card = document.createElement("div")
+
 card.className = "project"
 
 card.innerHTML = `
 <a href="${project.file}" style="text-decoration:none;color:white">
 
-<div class="project-img">${project.icon}</div>
+<div class="project-img">⚡</div>
 
 <div class="project-content">
 <h3>${project.name}</h3>
-<p>View project</p>
+<p>Open project</p>
 </div>
 
 </a>
@@ -476,30 +533,22 @@ container.appendChild(card)
 
 }
 
-
-function nextProjects(e){
-
-if(e.target.closest("a")) return
-
-current++
 renderProjects()
 
+window.addEventListener("scroll", function(){
+
+const nav = document.querySelector("nav")
+
+if(window.scrollY > 50){
+nav.classList.add("scrolled")
+}else{
+nav.classList.remove("scrolled")
 }
 
-function shuffle(array){
-
-for (let i = array.length - 1; i > 0; i--) {
-
-const j = Math.floor(Math.random() * (i + 1))
-[array[i], array[j]] = [array[j], array[i]]
-
-}
-
-return array
-
-}
+})
 
 </script>
+
 </body>
 
 </html>
