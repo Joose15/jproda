@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Energy Monitoring System</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+
+font-family:'Inter',sans-serif;
+background:#212121;
+color:white;
+line-height:1.7;
+
+}
+
+/* ========================= */
+/* BACKGROUND */
+/* ========================= */
+
+.bg{
+
+position:fixed;
+width:100%;
+height:100%;
+z-index:-2;
+
+background:
+radial-gradient(circle at 20% 30%, #CBFE0033, transparent 40%),
+radial-gradient(circle at 80% 70%, #CBFE0040, transparent 40%),
+radial-gradient(circle at 50% 50%, #CBFE0025, transparent 50%);
+
+filter:blur(140px);
+
+}
+
+/* ========================= */
+/* NAV */
+/* ========================= */
+
+nav{
+
+position:fixed;
+
+top:25px;
+left:50%;
+
+transform:translateX(-50%);
+
+background:rgba(0,0,0,0.6);
+
+backdrop-filter:blur(20px);
+
+border-radius:40px;
+
+padding:12px 25px;
+
+border:1px solid rgba(255,255,255,0.1);
+
+z-index:100;
+
+}
+
+nav a{
+
+color:#ccc;
+text-decoration:none;
+margin:0 20px;
+
+}
+
+nav a:hover{
+
+color:#CBFE00;
+
+}
+
+/* ========================= */
+/* ARTICLE */
+/* ========================= */
+
+.article{
+
+max-width:900px;
+margin:auto;
+
+padding:160px 20px 120px 20px;
+
+}
+
+/* TITLE */
+
+.article h1{
+
+font-size:52px;
+margin-bottom:20px;
+
+background:linear-gradient(90deg,#CBFE00,#9EDB00);
+-webkit-background-clip:text;
+color:transparent;
+
+}
+
+/* META */
+
+.meta{
+
+opacity:0.6;
+margin-bottom:50px;
+
+}
+
+/* PARAGRAPH */
+
+.article p{
+
+font-size:18px;
+margin-bottom:28px;
+
+opacity:0.9;
+
+}
+
+/* IMAGE */
+
+.article img{
+
+width:100%;
+border-radius:12px;
+margin:40px 0;
+
+}
+
+/* CODE BLOCK */
+
+.code{
+
+background:#1b1b1b;
+
+border-radius:12px;
+
+padding:25px;
+
+font-family:monospace;
+
+overflow:auto;
+
+margin:40px 0;
+
+border:1px solid rgba(203,254,0,0.2);
+
+}
+
+/* SECTION TITLES */
+
+.article h2{
+
+margin-top:70px;
+margin-bottom:20px;
+
+color:#CBFE00;
+
+}
+
+/* FOOTER */
+
+.footer{
+
+text-align:center;
+
+padding:60px;
+
+opacity:0.5;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<nav>
+<a href="../index.html">Home</a>
+<a href="projects.html">Projects</a>
+</nav>
+
+<div class="article">
+
+<h1>Energy Monitoring System</h1>
+
+<div class="meta">
+Embedded Systems · Power Electronics · IoT
+</div>
+
+<p>
+This project explores the design of a modular energy monitoring system capable of measuring voltage, current and power consumption in real time.  
+The goal was to build a flexible platform suitable for industrial installations and smart energy systems.
+</p>
+
+<p>
+The system integrates multiple sensors with a microcontroller capable of performing signal acquisition and digital processing. Data can be transmitted to external systems through communication protocols commonly used in industrial environments.
+</p>
+
+<img src="../img/energy-system.jpg">
+
+<h2>Hardware Architecture</h2>
+
+<p>
+The hardware design combines current sensing, voltage measurement and signal conditioning circuits.  
+A dedicated ADC captures the signals which are then processed by the embedded firmware.
+</p>
+
+<div class="code">
+
+STM32H7  
+ADS1115 ADC  
+ACS712 Current Sensor  
+ZMPT101B Voltage Sensor  
+
+</div>
+
+<h2>Signal Processing</h2>
+
+<p>
+The firmware performs signal filtering and RMS calculations to obtain accurate electrical measurements.  
+This allows the system to calculate important metrics such as instantaneous power and total energy consumption.
+</p>
+
+<p>
+All measurements are structured in a format suitable for integration with higher level platforms or SCADA systems.
+</p>
+
+<h2>Applications</h2>
+
+<p>
+Potential applications of the system include:
+</p>
+
+<p>
+
+• Smart energy monitoring  
+• Industrial installations  
+• Renewable energy systems  
+• Educational platforms  
+
+</p>
+
+<h2>Conclusion</h2>
+
+<p>
+This project demonstrates how embedded systems can be used to create scalable monitoring platforms for modern electrical infrastructures.
+</p>
+
+</div>
+
+<div class="footer">
+© Jose Peñalba
+</div>
+
+</body>
+
+</html>
