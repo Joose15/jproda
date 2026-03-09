@@ -430,12 +430,13 @@ allProjects = shuffle(projects)
 
 renderProjects()
 
-})
-.catch(error => {
+// activar click después de cargar
+document.getElementById("projects-container")
+.addEventListener("click", nextProjects)
 
-console.error("Error cargando proyectos:", error)
-
 })
+.catch(err => console.error(err))
+
 
 function renderProjects(){
 
@@ -443,16 +444,20 @@ const container = document.getElementById("projects-container")
 
 container.innerHTML = ""
 
-const visible = allProjects.slice(current, current+3)
+if(allProjects.length === 0) return
+
+const visible = []
+
+for(let i = 0; i < 3; i++){
+visible.push(allProjects[(current + i) % allProjects.length])
+}
 
 visible.forEach(project => {
 
 const card = document.createElement("div")
-
 card.className = "project"
 
 card.innerHTML = `
-
 <a href="${project.file}" style="text-decoration:none;color:white">
 
 <div class="project-img">${project.icon}</div>
@@ -463,7 +468,6 @@ card.innerHTML = `
 </div>
 
 </a>
-
 `
 
 container.appendChild(card)
@@ -472,12 +476,21 @@ container.appendChild(card)
 
 }
 
+
+function nextProjects(e){
+
+if(e.target.closest("a")) return
+
+current++
+renderProjects()
+
+}
+
 function shuffle(array){
 
 for (let i = array.length - 1; i > 0; i--) {
 
 const j = Math.floor(Math.random() * (i + 1))
-
 [array[i], array[j]] = [array[j], array[i]]
 
 }
@@ -485,22 +498,6 @@ const j = Math.floor(Math.random() * (i + 1))
 return array
 
 }
-
-document.getElementById("projects-container").addEventListener("click", () => {
-
-current += 3
-
-if(current >= allProjects.length){
-
-allProjects = shuffle(allProjects)
-
-current = 0
-
-}
-
-renderProjects()
-
-})
 
 </script>
 </body>
