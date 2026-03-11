@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Gym Performance Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+:root{
+--accent:#b7f247;
+--dark:#0f0f11;
+--bg:#0f0f11;
+--card:white;
+--text:#ffffff;
+--muted:#d8d8d8;
+}
+
+[data-theme="dark"]{
+--accent:#a3ff2f;
+--dark:#050505;
+--bg:#0f0f11;
+--card:#2e2e33;
+--text:#ffffff;
+--muted:#d8d8d8;
+}
+
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+body{
+font-family:'Inter',sans-serif;
+background:var(--bg);
+color:var(--text);
+min-height:100dvh;
+overflow-x:hidden;
+}
+
+/* DASHBOARD LAYOUT */
+
+.dashboard{
+display:grid;
+grid-template-columns:1fr;
+min-height:100dvh;
+}
+
+/* MAIN AREA */
+
+.main{
+padding:35px 35px 20px 35px;
+height:100%;
+display:flex;
+flex-direction:column;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+margin-left:60px; 
+}
+
+.header h1{
+font-size:22px;
+}
+
+
+.insights{
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+margin-bottom:25px;
+
+}
+
+.insight-card{
+
+background:rgba(32,32,36,0.6);
+
+backdrop-filter: blur(18px);
+
+border:1px solid rgba(255,255,255,0.05);
+
+padding:18px;
+border-radius:12px;
+
+display:flex;
+flex-direction:column;
+gap:4px;
+
+}
+
+.insight-card:hover{
+
+transform:translateY(-4px);
+box-shadow:0 15px 30px rgba(0,0,0,0.08);
+
+}
+
+.insight-card h3{
+
+font-size:14px;
+color:var(--muted);
+margin-bottom:10px;
+
+}
+
+.insight-card h1{
+
+font-size:24px;
+font-weight:600;
+
+}
+
+.insight-card p{
+
+font-size:13px;
+color:var(--muted);
+
+}
+/* GRID */
+
+.grid{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:20px;
+flex:1;
+}
+
+/* CARD */
+
+.card{
+
+background:rgba(40,40,45,0.65);
+
+backdrop-filter:blur(14px);
+
+border:1px solid rgba(255,255,255,0.05);
+
+padding:25px;
+border-radius:12px;
+
+}
+
+.radar-chart{
+width:100%;
+height:380px !important;
+}
+
+/* RADIAL MENU */
+
+.radial{
+
+position:fixed;
+z-index:1000;
+bottom:40px;
+left:50%;
+
+transform:translateX(-50%);
+
+width:70px;
+height:70px;
+
+background:var(--accent);
+
+border-radius:50%;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:30px;
+
+cursor:pointer;
+
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+
+}
+
+.radial-menu{
+z-index:1100;
+position:fixed;
+
+bottom:120px;
+left:50%;
+
+transform:translateX(-50%);
+
+display:none;
+
+gap:15px;
+
+}
+
+.radial-menu button{
+
+width:55px;
+height:55px;
+
+border-radius:50%;
+
+border:none;
+
+background:white;
+
+box-shadow:0 10px 20px rgba(0,0,0,0.15);
+
+cursor:pointer;
+
+font-size:20px;
+
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+position:fixed;
+
+left:-220px;
+top:0;
+
+width:220px;
+height:100%;
+
+background:var(--dark);
+
+color:white;
+
+padding:30px;
+
+transition:0.35s;
+
+z-index:1200;   
+
+}
+
+.sidebar.open{
+left:0;
+}
+
+.menu{
+margin-top:40px;
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.menu div{
+padding:10px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.menu div:hover{
+background:#1f1f1f;
+}
+
+/* BUTTON */
+
+.menu-btn{
+
+position:fixed;
+top:20px;
+left:20px;
+
+background:white;
+
+border:none;
+
+width:45px;
+height:45px;
+
+border-radius:10px;
+
+box-shadow:0 10px 20px rgba(0,0,0,0.15);
+
+cursor:pointer;
+
+font-size:20px;
+
+z-index:1100;
+
+}
+
+.theme-toggle{
+
+border:none;
+background:white;
+
+width:40px;
+height:40px;
+
+border-radius:10px;
+
+cursor:pointer;
+
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+
+font-size:18px;
+
+transition:0.2s;
+
+}
+
+.theme-toggle:hover{
+
+transform:scale(1.05);
+
+}
+
+body::before{
+
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+
+background:
+
+linear-gradient(
+140deg,
+#254d2f 0%,
+#3e6d50 40%,
+#3cc76a 70%,
+#284728 100%
+),
+
+radial-gradient(circle at 30% 35%, rgba(120,255,100,0.45), transparent 65%),
+radial-gradient(circle at 70% 60%, rgba(80,200,140,0.30), transparent 65%),
+radial-gradient(circle at 20% 70%, rgba(40,120,60,0.35), transparent 70%),
+radial-gradient(circle at 50% 50%, rgba(100,150,255,0.15), transparent 70%);
+
+filter:blur(45px);
+
+z-index:-2;
+
+animation:backgroundMove 30s ease-in-out infinite alternate;
+
+}
+
+@keyframes backgroundMove{
+
+0%{
+transform:translate(0px,0px) scale(1);
+}
+
+100%{
+transform:translate(60px,30px) scale(1.05);
+}
+
+}
+
+body::after{
+
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+
+background:
+
+radial-gradient(circle at center, transparent 72%, rgba(0,0,0,0.55) 96%),
+
+linear-gradient(
+to bottom,
+rgba(3, 19, 0, 0.8),
+transparent 18%,
+transparent 90%,
+rgba(3, 19, 0, 0.8)
+),
+
+linear-gradient(
+to right,
+rgba(3, 19, 0,0.6),
+transparent 50%,
+transparent 50%,
+rgba(3, 19, 0,0.6)
+);
+
+pointer-events:none;
+z-index:-1;
+
+}
+
+.topbar{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+margin-bottom:25px;
+
+}
+
+.greeting h2{
+
+font-size:20px;
+font-weight:600;
+
+}
+
+.greeting p{
+
+font-size:13px;
+color:var(--muted);
+
+}
+
+.top-controls{
+
+display:flex;
+align-items:center;
+gap:10px;
+
+}
+
+.period{
+
+background:var(--card);
+border:none;
+
+padding:8px 14px;
+
+border-radius:20px;
+
+font-size:13px;
+
+cursor:pointer;
+
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+
+}
+
+.icon-btn{
+
+width:36px;
+height:36px;
+
+border:none;
+
+border-radius:50%;
+
+background:var(--card);
+
+cursor:pointer;
+
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+
+font-size:16px;
+
+}
+
+.card,
+.insight-card{
+
+background:rgba(32,32,36,0.6);
+backdrop-filter:blur(18px);
+
+border:1px solid rgba(255,255,255,0.06);
+
+box-shadow:
+0 15px 40px rgba(0,0,0,0.45),
+inset 0 1px 0 rgba(255,255,255,0.04);
+
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width:768px){
+
+.main{
+padding:20px;
+}
+
+/* quitar margen lateral del header */
+.topbar{
+margin-left:0;
+flex-direction:column;
+align-items:flex-start;
+gap:15px;
+}
+
+.top-controls{
+
+width:100%;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+gap:10px;
+
+flex-wrap:wrap;
+
+}
+
+.greeting{
+max-width:80%;
+margin-left:70px;
+}
+
+
+/* tarjetas resumen */
+.insights{
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+/* gráfico y carga muscular en una columna */
+.grid{
+grid-template-columns:1fr;
+}
+
+/* reducir altura radar */
+.radar-chart{
+height:260px !important;
+}
+
+/* botón menú */
+.menu-btn{
+top:15px;
+left:15px;
+}
+
+/* botón radial más pequeño */
+.radial{
+width:60px;
+height:60px;
+font-size:26px;
+bottom:25px;
+}
+
+/* controles superiores */
+.top-controls{
+width:100%;
+justify-content:space-between;
+}
+
+/* selector periodo */
+.period{
+font-size:12px;
+padding:6px 10px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+<div class="sidebar" id="sidebar">
+
+<h2>Fitness OS</h2>
+
+<div class="menu">
+
+<div onclick="closeMenu()">Dashboard</div>
+<div onclick="closeMenu()">Workout Log</div>
+<div onclick="closeMenu()">Muscle Map</div>
+<div onclick="closeMenu()">Fatigue</div>
+<div onclick="closeMenu()">Analytics</div>
+<div onclick="closeMenu()">Settings</div>
+
+</div>
+
+</div>
+
+<div class="dashboard">
+
+<div class="main">
+
+<div class="topbar">
+
+<div class="greeting">
+
+<h2>Good morning, Jose</h2>
+<p>Let’s do some workout today...</p>
+
+</div>
+
+<div class="top-controls">
+
+<select class="period">
+<option>Daily</option>
+<option selected>Weekly</option>
+<option>Monthly</option>
+</select>
+
+</div>
+
+</div>
+
+
+<div class="insights">
+
+<div class="insight-card">
+<h3>🔥 Daily Score</h3>
+<h1>82</h1>
+<p>Great session today</p>
+</div>
+
+<div class="insight-card">
+<h3>⚡ Recovery</h3>
+<h1>Good</h1>
+<p>Body ready for training</p>
+</div>
+
+<div class="insight-card">
+<h3>🏆 New PR</h3>
+<p>Bench Press</p>
+<h1>90kg</h1>
+</div>
+
+<div class="insight-card">
+<h3>🔥 Calories Burned</h3>
+<h1>540</h1>
+<p>Estimated</p>
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+
+<h3>Performance Trend</h3>
+
+<canvas id="chart" class="radar-chart"></canvas>
+
+</div>
+
+<div class="card">
+
+<h3>Muscle Load</h3>
+
+<p>Chest</p>
+<div style="background:#eee;height:8px;border-radius:10px;margin-bottom:10px">
+<div style="width:70%;height:100%;background:#b7f247"></div>
+</div>
+
+<p>Back</p>
+<div style="background:#eee;height:8px;border-radius:10px;margin-bottom:10px">
+<div style="width:50%;height:100%;background:#b7f247"></div>
+</div>
+
+<p>Legs</p>
+<div style="background:#eee;height:8px;border-radius:10px">
+<div style="width:30%;height:100%;background:#b7f247"></div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+<div class="radial" onclick="toggleRadial()">+</div>
+
+<div class="radial-menu" id="radialMenu">
+
+<button onclick="selectRadial()">🏋</button>
+<button onclick="selectRadial()">📊</button>
+<button onclick="selectRadial()">⏱</button>
+<button onclick="selectRadial()">🔥</button>
+
+</div>
+
+<script>
+
+function toggleMenu(){
+
+document.getElementById("sidebar").classList.toggle("open");
+
+}
+
+function closeMenu(){
+
+document.getElementById("sidebar").classList.remove("open");
+
+}
+
+
+function toggleRadial(){
+
+const menu=document.getElementById("radialMenu");
+
+menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+
+}
+
+function selectRadial(){
+
+document.getElementById("radialMenu").style.display="none";
+
+}
+
+function toggleTheme(){
+
+const current=document.documentElement.getAttribute("data-theme");
+
+if(current==="dark"){
+
+document.documentElement.removeAttribute("data-theme");
+
+}else{
+
+document.documentElement.setAttribute("data-theme","dark");
+
+}
+
+}
+
+
+const ctx = document.getElementById('chart');
+
+new Chart(ctx, {
+
+type: 'radar',
+
+data: {
+
+labels: [
+"Fuerza",
+"Volumen",
+"Intensidad",
+"Recuperación",
+"Fatiga",
+"Consistencia"
+],
+
+datasets: [
+
+{
+label: "Objetivo",
+data: [80,80,80,80,80,80],
+
+borderColor: "rgba(255,255,255,0.2)",
+backgroundColor: "rgba(255,255,255,0.05)",
+borderWidth: 1,
+pointRadius:0
+},
+
+{
+label: "Estado actual",
+data: [78,65,82,55,70,90],
+
+borderColor: "#b7f247",
+backgroundColor: "rgba(183,242,71,0.25)",
+pointBackgroundColor:"#b7f247",
+borderWidth:2
+}
+
+]
+
+},
+
+options:{
+
+maintainAspectRatio:false,
+
+plugins:{legend:{display:false}},
+
+scales:{
+r:{
+grid:{
+color:"rgba(255,255,255,0.08)"
+},
+
+angleLines:{
+color:"rgba(255,255,255,0.08)"
+},
+
+pointLabels:{
+color:"#d8d8d8",
+font:{
+size:12
+}
+},
+
+ticks:{
+display:false,
+stepSize:20,
+beginAtZero:true,
+max:100
+}
+}
+}
+
+}
+
+});
+
+document.addEventListener("click", function(event){
+
+const radialMenu = document.getElementById("radialMenu");
+const radialBtn = document.querySelector(".radial");
+
+if(
+!radialMenu.contains(event.target) &&
+!radialBtn.contains(event.target)
+){
+radialMenu.style.display = "none";
+}
+
+});
+
+document.addEventListener("click", function(event){
+
+const sidebar = document.getElementById("sidebar");
+const button = document.querySelector(".menu-btn");
+
+if(
+!sidebar.contains(event.target) &&
+!button.contains(event.target)
+){
+sidebar.classList.remove("open");
+}
+
+});
+
+</script>
+
+</body>
+</html>
