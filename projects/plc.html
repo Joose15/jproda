@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div id="reader" style="width:300px"></div>
+
+<canvas id="chart"></canvas>
+
+<script>
+
+let dataRep = []
+let dataVel = []
+
+const ctx = document.getElementById('chart');
+
+const chart = new Chart(ctx, {
+type: 'line',
+data: {
+labels: [],
+datasets: [{
+label: 'Velocidad',
+data: dataVel
+}]
+}
+})
+
+function onScanSuccess(decodedText) {
+
+console.log(decodedText)
+
+let parts = decodedText.split(";")
+
+let rep = parseInt(parts[0].split("=")[1])
+let vel = parseFloat(parts[1].split("=")[1])
+
+dataRep.push(rep)
+dataVel.push(vel)
+
+chart.data.labels.push(rep)
+chart.update()
+}
+
+let scanner = new Html5QrcodeScanner(
+"reader",
+{ fps: 10, qrbox: 250 }
+)
+
+scanner.render(onScanSuccess)
+
+</script>
+
+</body>
+</html>
