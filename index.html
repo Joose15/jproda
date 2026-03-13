@@ -786,6 +786,119 @@ transform:translateY(0px);
 
 }
 
+/* ===== PROGRAM DISCOVERY ===== */
+
+.programs-view{
+display:none;
+padding:35px 35px 20px 35px;
+}
+
+
+.program-filters{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.program-filter{
+background:rgba(255,255,255,0.05);
+border:none;
+padding:8px 14px;
+border-radius:20px;
+cursor:pointer;
+font-size:13px;
+color:white;
+}
+
+.program-filter:hover{
+background:#b7f247;
+color:black;
+}
+
+.programs-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:22px;
+}
+
+.program-card{
+background:rgba(35,35,40,0.7);
+border-radius:16px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.05);
+transition:0.35s;
+position:relative;
+cursor:pointer;
+}
+
+.program-card:hover{
+transform:translateY(-6px) scale(1.02);
+box-shadow:0 20px 40px rgba(0,0,0,0.6);
+border:1px solid rgba(183,242,71,0.3);
+}
+
+.program-card img{
+width:100%;
+height:170px;
+object-fit:cover;
+}
+
+.program-badge{
+position:absolute;
+top:10px;
+left:10px;
+background:#b7f247;
+color:black;
+font-size:11px;
+padding:4px 8px;
+border-radius:10px;
+}
+
+.program-content{
+padding:16px;
+}
+
+.program-content h3{
+margin:0;
+font-size:16px;
+}
+
+.program-rating{
+font-size:12px;
+color:#b7f247;
+margin-top:3px;
+}
+
+.program-stats{
+display:flex;
+gap:12px;
+font-size:12px;
+color:#999;
+margin-top:8px;
+}
+
+.program-bottom{
+margin-top:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.program-price{
+font-weight:600;
+}
+
+.program-btn{
+background:#b7f247;
+border:none;
+padding:6px 14px;
+border-radius:20px;
+cursor:pointer;
+font-size:12px;
+}
+
+
+
 </style>
 
 </head>
@@ -802,6 +915,7 @@ transform:translateY(0px);
 
 <div onclick="showDashboard()">Dashboard</div>
 <div onclick="showAdaptive()">Adaptive Training</div>
+<div onclick="showPrograms()">Programs</div>
 <div onclick="closeMenu()">Muscle Map</div>
 <div onclick="closeMenu()">Fatigue</div>
 <div onclick="closeMenu()">Analytics</div>
@@ -1013,6 +1127,115 @@ Your body is ready for high intensity training today.
 <button class="download-btn">Download</button>
 </div>
 
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="programsView" class="programs-view">
+
+<div class="adaptive-header greeting">
+
+<h2>Discover Programs</h2>
+<p>Explore science-based training programs created by coaches.</p>
+
+</div>
+
+<div class="program-filters">
+
+<button class="program-filter">All</button>
+<button class="program-filter">Strength</button>
+<button class="program-filter">Hypertrophy</button>
+<button class="program-filter">Fat Loss</button>
+<button class="program-filter">Athlete</button>
+
+</div>
+
+<div class="programs-grid">
+
+
+<div class="program-card">
+
+<div class="program-badge">Trending</div>
+
+<img src="https://images.unsplash.com/photo-1517960413843-0aee8e2b3285?auto=format&fit=crop&w=800&q=80">
+
+<div class="program-content">
+
+<h3>Hypertrophy Builder</h3>
+
+<div class="program-rating">⭐ 4.8 (124)</div>
+
+<div class="program-stats">
+<span>6 weeks</span>
+<span>4 days/week</span>
+<span>Intermediate</span>
+</div>
+
+<div class="program-bottom">
+<div class="program-price">€19</div>
+<button class="program-btn">View</button>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="program-card">
+
+<div class="program-badge">Science</div>
+
+<img src="https://images.unsplash.com/photo-1599058917765-a780eda07a3e?auto=format&fit=crop&w=800&q=80">
+
+<div class="program-content">
+
+<h3>Fat Loss Plan</h3>
+
+<div class="program-rating">⭐ 4.9 (210)</div>
+
+<div class="program-stats">
+<span>5 weeks</span>
+<span>4 days/week</span>
+<span>All levels</span>
+</div>
+
+<div class="program-bottom">
+<div class="program-price">€14</div>
+<button class="program-btn">View</button>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="program-card">
+
+<div class="program-badge">Verified</div>
+
+<img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80">
+
+<div class="program-content">
+
+<h3>Strength Cycle</h3>
+
+<div class="program-rating">⭐ 4.7 (92)</div>
+
+<div class="program-stats">
+<span>4 weeks</span>
+<span>3 days/week</span>
+<span>Advanced</span>
+</div>
+
+<div class="program-bottom">
+<div class="program-price">€24</div>
+<button class="program-btn">View</button>
 </div>
 
 </div>
@@ -1245,6 +1468,16 @@ function showDashboard(){
 
 document.querySelector(".dashboard").style.display = "block"
 document.getElementById("adaptiveView").style.display = "none"
+
+}
+
+function showPrograms(){
+
+document.querySelector(".dashboard").style.display = "none"
+document.getElementById("adaptiveView").style.display = "none"
+document.getElementById("programsView").style.display = "block"
+
+closeMenu()
 
 }
 
