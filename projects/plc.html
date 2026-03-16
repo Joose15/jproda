@@ -1,60 +1,1233 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stepli</title>
 
-<script src="https://unpkg.com/html5-qrcode"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
 
+:root{
+--panel:#243024;
+--panel2:#2f3c2f;
+--accent:#a8ff60;
+--text:#eef5ee;
+}
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+body{
+font-family:system-ui;
+height:100dvh;
+overflow:hidden;
+color:var(--text);
+
+background:linear-gradient(
+180deg,
+#557455 0%,
+#435b43 40%,
+#364936 100%
+);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+position:fixed;
+top:0;
+left:0;
+height:100%;
+width:260px;
+background:var(--panel);
+padding:20px;
+display:flex;
+flex-direction:column;
+gap:10px;
+
+transform:translateX(-260px);
+transition:.25s;
+z-index:100;
+}
+
+.sidebar.open{
+transform:translateX(0);
+}
+
+.menu-item{
+padding:10px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.menu-item:hover{
+background:var(--panel2);
+}
+
+/* OVERLAY */
+
+.overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.35);
+opacity:0;
+pointer-events:none;
+transition:.2s;
+}
+
+.overlay.active{
+opacity:1;
+pointer-events:auto;
+}
+
+/* MAIN */
+
+.main{
+height:100%;
+display:flex;
+flex-direction:column;
+}
+
+.topbar{
+display:flex;
+align-items:center;
+gap:12px;
+padding:16px;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.saludo{
+display:flex;
+flex-direction:column;
+line-height:1.2;
+}
+
+#saludo{
+font-weight:700;
+font-size:16px;
+}
+
+.subsaludo{
+font-size:13px;
+opacity:.7;
+}
+
+
+.menu-btn{
+font-size:20px;
+cursor:pointer;
+}
+
+/* CONTENT */
+
+.container{
+flex:1;
+overflow:auto;
+
+padding:30px 40px;
+
+display:flex;
+flex-direction:column;
+gap:24px;
+
+width:100%;
+max-width:none;
+}
+
+/* CARD */
+
+.card{
+
+background:linear-gradient(
+135deg,
+rgba(36,48,36,0.9),
+rgba(47,60,47,0.85)
+);
+
+border-radius:16px;
+
+padding:20px 24px;
+
+display:flex;
+flex-direction:column;
+gap:14px;
+
+border:1px solid rgba(255,255,255,0.06);
+
+box-shadow:
+0 10px 30px rgba(0,0,0,0.35),
+0 0 40px rgba(168,255,96,0.04);
+}
+
+/* BOARDS */
+
+.boards{
+display:flex;
+gap:8px;
+overflow-x:auto;
+margin-bottom:14px;
+}
+
+.board{
+
+background:transparent;
+
+border:2px solid var(--accent);
+color:var(--accent);
+
+padding:6px 14px;
+
+border-radius:20px;
+
+cursor:pointer;
+white-space:nowrap;
+
+font-size:13px;
+
+transition:.2s;
+
+}
+
+.board.active{
+
+background:var(--accent);
+color:#1c241c;
+
+border-color:var(--accent);
+
+}
+
+.board:hover{
+
+background:rgba(168,255,96,0.08);
+
+}
+
+/* INPUT */
+
+
+
+input{
+flex:1;
+padding:10px 14px;
+
+border:none;
+border-radius:10px;
+
+background:var(--panel2);
+color:white;
+
+font-size:14px;
+}
+
+button{
+background:var(--accent);
+
+width:38px;
+height:38px;
+
+border:none;
+border-radius:10px;
+
+cursor:pointer;
+font-size:16px;
+font-weight:600;
+}
+
+.buttonLarge{
+background:var(--accent);
+
+border:none;
+border-radius:10px;
+
+padding:12px 18px;
+
+width:auto;
+height:auto;
+
+font-size:14px;
+font-weight:600;
+
+cursor:pointer;
+
+color:#1c241c;
+}
+
+/* KANBAN */
+
+.kanban{
+display:flex;
+gap:16px;
+overflow-x:auto;
+}
+
+.column{
+background:var(--panel2);
+border-radius:10px;
+padding:14px;
+min-width:260px;
+}
+
+.column-title{
+margin-bottom:10px;
+}
+
+.task{
+background:var(--panel);
+padding:10px;
+border-radius:8px;
+margin-top:8px;
+}
+
+/* DASHBOARD SLIDER */
+
+
+.progressCard svg{
+display:block;
+margin:auto;
+}
+
+.page{
+display:flex;
+flex-direction:column;
+gap:28px;
+}
+
+.input{
+display:flex;
+gap:10px;
+width:100%;
+min-width:0;
+}
+
+.progressSlider{
+
+display:flex;
+gap:24px;
+
+justify-content:center;
+align-items:stretch;
+
+overflow-x:auto;
+
+padding:30px;
+
+}
+
+.progressCard{
+
+min-width:240px;
+max-width:240px;
+
+background:linear-gradient(
+180deg,
+rgba(47,60,47,0.95),
+rgba(36,48,36,0.9)
+);
+
+border-radius:16px;
+
+padding:22px;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+
+gap:16px;
+
+border:1px solid rgba(255,255,255,0.05);
+
+transition:.25s;
+
+}
+
+.progressCard:hover{
+
+transform:translateY(-6px);
+
+box-shadow:
+0 12px 40px rgba(0,0,0,0.4),
+0 0 25px rgba(168,255,96,0.08);
+
+}
+
+.hero{
+background:linear-gradient(
+135deg,
+rgba(168,255,96,0.18),
+rgba(168,255,96,0.03)
+);
+
+border:1px solid rgba(168,255,96,0.25);
+
+box-shadow:
+0 0 40px rgba(168,255,96,0.08),
+0 10px 30px rgba(0,0,0,0.35);
+}
+
+.heroTop{
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:20px;
+}
+.progressFill{
+height:100%;
+background:var(--accent);
+width:0%;
+
+transition:
+width .6s cubic-bezier(.4,0,.2,1);
+}
+
+.heroStats{
+display:flex;
+gap:16px;
+flex-wrap:wrap;
+}
+
+.heroTitle{
+font-size:20px;
+font-weight:700;
+}
+
+.heroSub{
+font-size:13px;
+opacity:.7;
+}
+
+.heroStats{
+display:flex;
+gap:16px;
+}
+
+.stat{
+background:var(--panel2);
+padding:10px 14px;
+border-radius:10px;
+text-align:center;
+min-width:70px;
+}
+
+.statNumber{
+font-size:18px;
+font-weight:700;
+color:var(--accent);
+}
+
+.statLabel{
+font-size:11px;
+opacity:.7;
+}
+
+.dayProgress{
+margin-top:14px;
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+
+.progressBar{
+height:8px;
+background:rgba(255,255,255,.08);
+border-radius:6px;
+overflow:hidden;
+}
+
+.progressText{
+font-size:12px;
+opacity:.8;
+}
+
+/* NEXT TASK CARD */
+
+.nextTaskCard{
+
+background:linear-gradient(
+135deg,
+rgba(168,255,96,0.12),
+rgba(168,255,96,0.02)
+);
+
+border:1px solid rgba(168,255,96,0.25);
+
+border-radius:14px;
+
+padding:16px;
+
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+.nextTaskCard:hover{
+transform:translateY(-3px);
+box-shadow:0 6px 20px rgba(0,0,0,0.4);
+}
+
+.nextTaskTitle{
+font-size:13px;
+opacity:.7;
+margin-bottom:4px;
+}
+
+#nextTaskText{
+font-size:15px;
+font-weight:600;
+}
+
+/* POPUP */
+
+.taskPopup{
+
+position:fixed;
+inset:0;
+
+background:rgba(0,0,0,.6);
+
+display:none;
+
+align-items:center;
+justify-content:center;
+
+z-index:200;
+
+}
+
+.taskPopupContent{
+
+background:var(--panel);
+
+padding:24px;
+
+border-radius:16px;
+
+width:300px;
+
+display:flex;
+flex-direction:column;
+gap:16px;
+
+}
+
+.taskPopupTitle{
+font-weight:700;
+font-size:16px;
+}
+
+.taskPopupTask{
+background:var(--panel2);
+padding:10px;
+border-radius:8px;
+}
+
+.taskPopupButtons{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:10px;
+
+margin-top:8px;
+
+}
+
+.popupBtn{
+
+background:var(--accent);
+
+border:none;
+
+border-radius:10px;
+
+padding:12px;
+
+font-size:14px;
+
+font-weight:600;
+
+cursor:pointer;
+
+width:100%;
+
+color:#1c241c;
+
+}
+
+.popupBtn.secondary{
+background:var(--panel2);
+color:white;
+}
+
+</style>
 </head>
 
 <body>
 
-<div id="reader" style="width:300px"></div>
+<div class="sidebar" id="sidebar">
+<h3>Stepli</h3>
+<div class="menu-item" onclick="openPage('dashboard')">Dashboard</div>
+<div class="menu-item" onclick="openPage('tasks')">Tareas</div>
+<div class="menu-item" onclick="openPage('settings')">Ajustes</div>
+</div>
 
-<canvas id="chart"></canvas>
+<div class="overlay" id="overlay"></div>
+
+<div class="main">
+
+<div class="topbar">
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+<div class="saludo">
+<div id="saludo"></div>
+<div class="subsaludo">Es hora de organizar tu día</div>
+</div>
+</div>
+
+<div class="container">
+
+<!-- DASHBOARD -->
+
+<div id="page-dashboard" class="page">
+
+    <div class="card hero">
+
+<div class="heroTop">
+
+<div>
+<div class="heroTitle">Tu día en Stepli</div>
+<div class="heroSub">Organiza tus proyectos y avanza paso a paso</div>
+</div>
+
+<div class="heroStats">
+
+<div class="stat">
+<div class="statNumber" id="statTasks">0</div>
+<div class="statLabel">Tareas</div>
+</div>
+
+<div class="stat">
+<div class="statNumber" id="statDoing">0</div>
+<div class="statLabel">En progreso</div>
+</div>
+
+<div class="stat">
+<div class="statNumber" id="statDone">0</div>
+<div class="statLabel">Completadas</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="dayProgress">
+
+<div class="progressBar">
+<div class="progressFill" id="dayProgressFill"></div>
+</div>
+
+<div class="progressText" id="dayProgressText">0% completado</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<b>Progreso por proyecto</b>
+
+<div class="progressSlider" id="progressSlider"></div>
+<div class="nextTaskCard" onclick="openNextTask()">
+<div class="nextTaskTitle">Próxima tarea</div>
+<div id="nextTaskText">Sin tareas pendientes</div>
+</div>
+</div>
+
+<div class="card">
+
+<b>Crear tarea rápida</b>
+
+<div class="boards" id="boardsDashboard"></div>
+
+<div class="input">
+<input id="quickTask" placeholder="Nueva tarea">
+<button onclick="addQuickTask()">+</button>
+</div>
+
+</div>
+
+<div class="card">
+
+<b>Crear proyecto</b>
+
+<div class="input">
+<input id="newBoard" placeholder="Nombre proyecto">
+<button onclick="addBoard()">+</button>
+</div>
+
+</div>
+
+
+
+</div>
+
+
+<!-- TASKS -->
+
+<div id="page-tasks" class="page" style="display:none">
+
+<div class="card">
+
+<div class="boards" id="boardsTasks"></div>
+
+<div class="kanban" id="kanban"></div>
+
+</div>
+
+</div>
+
+
+<!-- SETTINGS -->
+
+<div id="page-settings" class="page" style="display:none">
+
+<div class="card">
+
+<b>Ajustes</b>
+
+<br><br>
+
+<button class="buttonLarge" onclick="factoryReset()">
+Restablecer fábrica
+</button>
+
+</div>
+
+</div>
+
+</div>
+</div>
 
 <script>
 
-let dataRep = []
-let dataVel = []
+function getNextTask(){
 
-const ctx = document.getElementById('chart');
+for(const boardName in boards){
 
-const chart = new Chart(ctx, {
-type: 'line',
-data: {
-labels: [],
-datasets: [{
-label: 'Velocidad',
-data: dataVel
-}]
+const board=boards[boardName]
+
+for(const col of board.columns){
+
+if(col.name==="To Do" && col.tasks.length>0){
+
+return {
+task:col.tasks[0],
+board:boardName,
+column:col.name
 }
+
+}
+
+}
+
+}
+
+for(const boardName in boards){
+
+const board=boards[boardName]
+
+for(const col of board.columns){
+
+if(col.name==="Doing" && col.tasks.length>0){
+
+return {
+task:col.tasks[0],
+board:boardName,
+column:col.name
+}
+
+}
+
+}
+
+}
+
+return null
+
+}
+
+function renderNextTask(){
+
+const next=getNextTask()
+
+const el=document.getElementById("nextTaskText")
+
+if(!next){
+el.innerText="Sin tareas pendientes"
+return
+}
+
+el.innerText=next.task
+
+}
+
+function openNextTask(){
+
+const next=getNextTask()
+
+if(!next) return
+
+document.getElementById("popupTaskText").innerText=next.task
+
+document.getElementById("taskPopup").style.display="flex"
+
+}
+
+function closeTaskPopup(){
+
+document.getElementById("taskPopup").style.display="none"
+
+}
+
+function moveNextTaskDoing(){
+
+const next=getNextTask()
+
+if(!next) return
+
+const board=boards[next.board]
+
+let from=board.columns.find(c=>c.name==="To Do")
+let to=board.columns.find(c=>c.name==="Doing")
+
+from.tasks.shift()
+
+to.tasks.push(next.task)
+
+save()
+
+closeTaskPopup()
+
+renderTasks()
+renderProgress()
+updateStats()
+renderNextTask()
+
+}
+
+function moveNextTaskDone(){
+
+const next=getNextTask()
+
+if(!next) return
+
+const board=boards[next.board]
+
+let from=board.columns.find(c=>c.name===next.column)
+let to=board.columns.find(c=>c.name==="Done")
+
+from.tasks.shift()
+
+to.tasks.push(next.task)
+
+save()
+
+closeTaskPopup()
+
+renderTasks()
+renderProgress()
+updateStats()
+renderNextTask()
+
+}
+
+/* MENU */
+
+const sidebar=document.getElementById("sidebar")
+const overlay=document.getElementById("overlay")
+
+function toggleMenu(){
+sidebar.classList.toggle("open")
+overlay.classList.toggle("active")
+}
+
+overlay.onclick=()=>{
+sidebar.classList.remove("open")
+overlay.classList.remove("active")
+}
+
+/* PAGE SWITCH */
+
+function openPage(page){
+
+document.querySelectorAll(".page").forEach(p=>{
+p.style.display="none"
 })
 
-function onScanSuccess(decodedText) {
+document.getElementById("page-"+page).style.display="flex"
 
-console.log(decodedText)
+sidebar.classList.remove("open")
+overlay.classList.remove("active")
 
-let parts = decodedText.split(";")
-
-let rep = parseInt(parts[0].split("=")[1])
-let vel = parseFloat(parts[1].split("=")[1])
-
-dataRep.push(rep)
-dataVel.push(vel)
-
-chart.data.labels.push(rep)
-chart.update()
 }
 
-let scanner = new Html5QrcodeScanner(
-"reader",
-{ fps: 10, qrbox: 250 }
-)
+/* DATA */
 
-scanner.render(onScanSuccess)
+let boards=JSON.parse(localStorage.getItem("stepliBoards"))||{
+
+"General":{
+columns:[
+{name:"To Do",tasks:[]},
+{name:"Doing",tasks:[]},
+{name:"Done",tasks:[]}
+]
+}
+
+}
+
+let currentBoard="General"
+
+function save(){
+localStorage.setItem("stepliBoards",JSON.stringify(boards))
+}
+
+/* GREETING */
+
+const hour=new Date().getHours()
+
+let saludo="Buenos días, <b>Jose</b>"
+
+if(hour>=14 && hour<20) saludo="Buenos tardes, <b>Jose</b>"
+if(hour>=20||hour<6) saludo="Buenas noches, <b>Jose</b>"
+
+document.getElementById("saludo").innerHTML=saludo
+
+/* BOARDS */
+
+function renderBoards(){
+
+const containers=[
+document.getElementById("boardsDashboard"),
+document.getElementById("boardsTasks")
+]
+
+containers.forEach(container=>{
+
+if(!container) return
+
+container.innerHTML=""
+
+Object.keys(boards).forEach(name=>{
+
+const div=document.createElement("div")
+div.className="board"
+
+if(name===currentBoard) div.classList.add("active")
+
+div.textContent=name
+
+div.onclick=()=>{
+currentBoard=name
+renderBoards()
+renderTasks()
+}
+
+container.appendChild(div)
+
+})
+
+})
+
+}
+
+/* QUICK TASK */
+
+function addQuickTask(){
+
+const input=document.getElementById("quickTask")
+
+if(input.value==="") return
+
+boards[currentBoard].columns[0].tasks.push(input.value)
+
+input.value=""
+
+save()
+
+renderTasks()
+renderProgress()
+updateStats()
+
+}
+
+/* ADD PROJECT */
+
+function addBoard(){
+
+const input=document.getElementById("newBoard")
+
+if(input.value==="") return
+
+boards[input.value]={
+
+columns:[
+{name:"To Do",tasks:[]},
+{name:"Doing",tasks:[]},
+{name:"Done",tasks:[]}
+]
+
+}
+
+currentBoard=input.value
+
+input.value=""
+
+save()
+
+renderBoards()
+renderTasks()
+renderProgress()
+
+}
+
+/* KANBAN */
+
+function renderTasks(){
+
+const container=document.getElementById("kanban")
+
+container.innerHTML=""
+
+const board=boards[currentBoard]
+
+board.columns.forEach(col=>{
+
+const column=document.createElement("div")
+column.className="column"
+
+/* DRAG & DROP */
+
+column.addEventListener("dragover",e=>{
+e.preventDefault()
+})
+
+column.addEventListener("drop",e=>{
+
+const data = JSON.parse(e.dataTransfer.getData("task"))
+
+let fromCol = board.columns.find(c=>c.name===data.from)
+let toCol = col
+
+fromCol.tasks = fromCol.tasks.filter(t=>t!==data.task)
+
+toCol.tasks.push(data.task)
+
+save()
+
+renderTasks()
+renderProgress()
+updateStats()
+
+})
+
+/* FIN DRAG & DROP */
+
+const title=document.createElement("div")
+title.className="column-title"
+title.innerText=col.name
+
+column.appendChild(title)
+
+col.tasks.forEach(task=>{
+
+const div=document.createElement("div")
+div.className="task"
+div.innerText=task
+
+div.draggable = true
+
+div.addEventListener("dragstart",e=>{
+e.dataTransfer.setData("task", JSON.stringify({
+task: task,
+from: col.name
+}))
+})
+
+column.appendChild(div)
+
+})
+
+const input=document.createElement("input")
+input.placeholder="Nueva tarea"
+
+input.addEventListener("keypress",e=>{
+
+if(e.key==="Enter" && input.value!=""){
+
+col.tasks.push(input.value)
+
+input.value=""
+
+save()
+
+renderTasks()
+renderProgress()
+updateStats()
+
+}
+
+})
+
+column.appendChild(input)
+
+container.appendChild(column)
+
+})
+
+}
+
+/* PROGRESS DASHBOARD */
+
+function renderProgress(){
+
+const container=document.getElementById("progressSlider")
+
+container.innerHTML=""
+
+Object.keys(boards).forEach(name=>{
+
+let total=0
+let done=0
+
+boards[name].columns.forEach(col=>{
+total+=col.tasks.length
+if(col.name==="Done") done+=col.tasks.length
+})
+
+let percent= total ? Math.round(done/total*100) : 0
+
+const card=document.createElement("div")
+card.className="progressCard"
+
+const radius = 40
+const circumference = 2 * Math.PI * radius
+const offset = circumference - percent / 100 * circumference
+
+card.innerHTML = `
+<b>${name}</b>
+
+<svg width="110" height="110">
+<circle cx="55" cy="55" r="${radius}" stroke="#2f3c2f" stroke-width="10" fill="none"/>
+<circle cx="55" cy="55" r="${radius}" stroke="#a8ff60" stroke-width="10"
+fill="none"
+stroke-dasharray="${circumference}"
+stroke-dashoffset="${offset}"
+transform="rotate(-90 55 55)"
+stroke-linecap="round"/>
+<text x="55" y="60" text-anchor="middle" fill="white" font-size="16">${percent}%</text>
+</svg>
+
+<div style="font-size:12px;opacity:.7">
+${done} / ${total} tareas
+</div>
+`
+
+container.appendChild(card)
+
+})
+
+}
+
+/* FACTORY RESET */
+
+function factoryReset(){
+
+if(!confirm("¿Borrar todos los proyectos y tareas?")) return
+
+localStorage.removeItem("stepliBoards")
+
+location.reload()
+
+}
+
+/* INIT */
+
+
+
+document.getElementById("quickTask").addEventListener("keypress",e=>{
+if(e.key==="Enter") addQuickTask()
+})
+
+function updateStats(){
+
+let total=0
+let doing=0
+let done=0
+
+Object.values(boards).forEach(board=>{
+
+board.columns.forEach(col=>{
+
+total += col.tasks.length
+
+if(col.name==="Doing") doing += col.tasks.length
+if(col.name==="Done") done += col.tasks.length
+
+})
+
+})
+
+document.getElementById("statTasks").innerText=total
+document.getElementById("statDoing").innerText=doing
+document.getElementById("statDone").innerText=done
+
+let percent = total ? Math.round(done/total*100) : 0
+
+document.getElementById("dayProgressFill").style.width = percent+"%"
+document.getElementById("dayProgressText").innerText = percent+"% completado"
+
+}
+save()
+
+renderBoards()
+renderTasks()
+renderProgress()
+updateStats()
 
 </script>
+
+<div class="taskPopup" id="taskPopup">
+
+<div class="taskPopupContent">
+
+<div class="taskPopupTitle">Próxima tarea</div>
+
+<div class="taskPopupTask" id="popupTaskText"></div>
+
+<div class="taskPopupButtons">
+
+<button class="popupBtn" onclick="moveNextTaskDoing()">
+Empezar 
+</button>
+
+<button class="popupBtn" onclick="moveNextTaskDone()">
+Completar
+</button>
+
+<button class="popupBtn secondary" onclick="closeTaskPopup()" style="grid-column:1/3">
+Cerrar
+</button>
+
+</div>
+
+</div>
+
+</div>
 
 </body>
 </html>
