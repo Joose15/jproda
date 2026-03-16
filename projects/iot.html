@@ -15,7 +15,7 @@
 <style>
 
 :root{
---accent:#b7f247;
+--accent:#4e9923;
 --dark:#0f0f11;
 --bg:#0f0f11;
 --card:white;
@@ -145,7 +145,6 @@ flex:1;
 .card{
 
 background:rgba(40,40,45,0.65);
-
 backdrop-filter:blur(14px);
 
 border:1px solid rgba(255,255,255,0.05);
@@ -153,12 +152,41 @@ border:1px solid rgba(255,255,255,0.05);
 padding:25px;
 border-radius:12px;
 
+transition:
+transform 0.35s ease,
+box-shadow 0.35s ease,
+border 0.35s ease;
+
 }
 
-.radar-chart{
-width:100%;
-height:380px !important;
+.card:hover{
+
+transform:translateY(-6px) scale(1.01);
+
+box-shadow:
+0 20px 50px rgba(0,0,0,0.55),
+0 0 20px rgba(163,255,47,0.15);
+
+border:1px solid rgba(163,255,47,0.25);
+
 }
+
+.card canvas{
+display:block;
+margin:auto;
+}
+
+.chart-container{
+width:100%;
+height:420px;
+position:relative;
+}
+
+.chart-container canvas{
+width:100% !important;
+height:100% !important;
+}
+
 
 /* RADIAL MENU */
 
@@ -401,13 +429,11 @@ z-index:-1;
 }
 
 .topbar{
-
 display:flex;
 justify-content:space-between;
 align-items:center;
-
 margin-bottom:25px;
-
+padding-left:70px;
 }
 
 .greeting h2{
@@ -433,25 +459,19 @@ gap:10px;
 }
 
 .period{
-
-background:var(--card);
-border:none;
-
-padding:8px 14px;
-
-border-radius:20px;
-
-font-size:13px;
-
-cursor:pointer;
-
-box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    background:var(--card);
+    border:none;
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
 
 }
 
 .icon-btn{
 
-width:36px;
+width:36px; 
 height:36px;
 
 border:none;
@@ -490,9 +510,9 @@ inset 0 1px 0 rgba(255,255,255,0.04);
 padding:20px;
 }
 
-/* quitar margen lateral del header */
 .topbar{
 margin-left:0;
+padding-left:70px;
 flex-direction:column;
 align-items:flex-start;
 gap:15px;
@@ -513,8 +533,8 @@ flex-wrap:wrap;
 }
 
 .greeting{
-max-width:80%;
-margin-left:70px;
+max-width:100%;
+margin-left:0;
 }
 
 
@@ -560,7 +580,324 @@ font-size:12px;
 padding:6px 10px;
 }
 
+.adaptive-header{
+padding-left:70px;
+margin-bottom:15px;
 }
+
+.adaptive-view{
+padding:0 20px 20px 20px;
+}
+
+}
+
+.card h3{
+margin-bottom:30px;
+}
+
+.muscle-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.muscle-header select{
+background:var(--card);
+border:none;
+padding:6px 10px;
+border-radius:20px;
+font-size:12px;
+cursor:pointer;
+}
+
+.bar{
+background:#eee;
+height:8px;
+border-radius:10px;
+margin-bottom:12px;
+overflow:hidden;
+}
+
+.bar div{
+height:100%;
+background:#b7f247;
+}
+
+.routine{
+margin-top:20px;
+}
+
+.routine h4{
+font-size:14px;
+margin-bottom:10px;
+color:var(--muted);
+}
+
+.routine ul{
+list-style:none;
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+
+.routine li{
+background:rgba(255,255,255,0.05);
+padding:6px 10px;
+border-radius:6px;
+font-size:13px;
+}
+
+/* ===== ADAPTIVE TRAINING VIEW ===== */
+
+.adaptive-grid{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.exercise{
+display:flex;
+align-items:center;
+gap:15px;
+margin-bottom:15px;
+background:rgba(255,255,255,0.04);
+padding:10px;
+border-radius:8px;
+}
+
+.recovery-card{
+order:1;
+width:100%;
+}
+
+.workout-card{
+order:2;
+width:100%;
+}
+
+.program-card{
+order:3;
+width:100%;
+}
+
+.exercise img{
+width:70px;
+height:70px;
+border-radius:6px;
+object-fit:cover;
+}
+
+.exercise-info{
+flex:1;
+}
+
+.exercise-info h4{
+margin:0;
+font-weight:500;
+}
+
+.exercise-info p{
+margin:0;
+font-size:13px;
+color:var(--muted);
+}
+
+.start-btn{
+background:var(--accent);
+border:none;
+padding:6px 14px;
+border-radius:20px;
+color:white;
+cursor:pointer;
+}
+
+/* PROGRAM LIBRARY */
+
+.program-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:10px;
+}
+
+.program{
+background:rgba(255,255,255,0.05);
+padding:12px;
+border-radius:10px;
+}
+
+.program h4{
+margin:0;
+font-size:14px;
+}
+
+.program p{
+font-size:12px;
+color:var(--muted);
+margin:4px 0 8px 0;
+}
+
+.download-btn{
+background:var(--accent);
+border:none;
+padding:4px 10px;
+border-radius:12px;
+font-size:12px;
+color:white;
+cursor:pointer;
+}
+
+.adaptive-view{
+display:none;
+padding:35px 35px 20px 35px;
+}
+
+.adaptive-header{
+margin-bottom:25px;
+padding-left:70px;
+}
+
+.adaptive-content{
+padding:0;
+}
+
+.recovery-card,
+.workout-card,
+.program-card{
+
+animation:cardFloat 6s ease-in-out infinite;
+
+}
+
+@keyframes cardFloat{
+
+0%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-4px);
+}
+
+100%{
+transform:translateY(0px);
+}
+
+}
+
+/* ===== PROGRAM DISCOVERY ===== */
+
+.programs-view{
+display:none;
+padding:35px 35px 20px 35px;
+}
+
+
+.program-filters{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.program-filter{
+background:rgba(255,255,255,0.05);
+border:none;
+padding:8px 14px;
+border-radius:20px;
+cursor:pointer;
+font-size:13px;
+color:white;
+}
+
+.program-filter:hover{
+background:#b7f247;
+color:black;
+}
+
+.programs-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:22px;
+}
+
+.program-card{
+background:rgba(35,35,40,0.7);
+border-radius:16px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.05);
+transition:0.35s;
+position:relative;
+cursor:pointer;
+}
+
+.program-card:hover{
+transform:translateY(-6px) scale(1.02);
+box-shadow:0 20px 40px rgba(0,0,0,0.6);
+border:1px solid rgba(183,242,71,0.3);
+}
+
+.program-card img{
+width:100%;
+height:170px;
+object-fit:cover;
+}
+
+.program-badge{
+position:absolute;
+top:10px;
+left:10px;
+background:#b7f247;
+color:black;
+font-size:11px;
+padding:4px 8px;
+border-radius:10px;
+}
+
+.program-content{
+padding:16px;
+}
+
+.program-content h3{
+margin:0;
+font-size:16px;
+}
+
+.program-rating{
+font-size:12px;
+color:#b7f247;
+margin-top:3px;
+}
+
+.program-stats{
+display:flex;
+gap:12px;
+font-size:12px;
+color:#999;
+margin-top:8px;
+}
+
+.program-bottom{
+margin-top:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.program-price{
+font-weight:600;
+}
+
+.program-btn{
+background:#b7f247;
+border:none;
+padding:6px 14px;
+border-radius:20px;
+cursor:pointer;
+font-size:12px;
+}
+
+
 
 </style>
 
@@ -572,12 +909,13 @@ padding:6px 10px;
 
 <div class="sidebar" id="sidebar">
 
-<h2>Fitness OS</h2>
+<h2>Atlas</h2>
 
 <div class="menu">
 
-<div onclick="closeMenu()">Dashboard</div>
-<div onclick="closeMenu()">Workout Log</div>
+<div onclick="showDashboard()">Dashboard</div>
+<div onclick="showAdaptive()">Adaptive Training</div>
+<div onclick="showPrograms()">Programs</div>
 <div onclick="closeMenu()">Muscle Map</div>
 <div onclick="closeMenu()">Fatigue</div>
 <div onclick="closeMenu()">Analytics</div>
@@ -600,15 +938,6 @@ padding:6px 10px;
 
 </div>
 
-<div class="top-controls">
-
-<select class="period">
-<option>Daily</option>
-<option selected>Weekly</option>
-<option>Monthly</option>
-</select>
-
-</div>
 
 </div>
 
@@ -647,31 +976,41 @@ padding:6px 10px;
 
 <h3>Performance Trend</h3>
 
-<canvas id="chart" class="radar-chart"></canvas>
+<div class="chart-container">
+<canvas id="chart"></canvas>
+</div>
 
 </div>
 
 <div class="card">
 
+<div class="muscle-header">
+
 <h3>Muscle Load</h3>
 
-<p>Chest</p>
-<div style="background:#eee;height:8px;border-radius:10px;margin-bottom:10px">
-<div style="width:70%;height:100%;background:#b7f247"></div>
-</div>
-
-<p>Back</p>
-<div style="background:#eee;height:8px;border-radius:10px;margin-bottom:10px">
-<div style="width:50%;height:100%;background:#b7f247"></div>
-</div>
-
-<p>Legs</p>
-<div style="background:#eee;height:8px;border-radius:10px">
-<div style="width:30%;height:100%;background:#b7f247"></div>
-</div>
+<select id="muscleSelect" onchange="updateRoutine()">
+<option value="chest">Pecho</option>
+<option value="back">Back</option>
+<option value="legs">Legs</option>
+<option value="shoulders">Shoulders</option>
+<option value="arms">Arms</option>
+</select>
 
 </div>
 
+<div class="routine">
+
+<h4>Suggested Routine</h4>
+
+<ul id="routineList">
+<li>Bench Press</li>
+<li>Incline Dumbbell Press</li>
+<li>Chest Fly</li>
+</ul>
+
+</div>
+
+</div>
 </div>
 
 </div>
@@ -687,6 +1026,223 @@ padding:6px 10px;
 <button onclick="selectRadial()">📊</button>
 <button onclick="selectRadial()">⏱</button>
 <button onclick="selectRadial()">🔥</button>
+
+</div>
+
+<div id="adaptiveView" class="adaptive-view">
+
+<div class="adaptive-header greeting">
+<h2>Adaptive Training</h2>
+<p>Your training generated from fatigue, recovery and performance.</p>
+</div>
+
+<div class="adaptive-content">
+
+<div class="adaptive-grid">
+
+<!-- LEFT SIDE -->
+
+
+<div class="card workout-card">
+<h3>Today's Adaptive Workout</h3>
+
+<div class="exercise">
+
+<img src="https://fitnessprogramer.com/wp-content/uploads/2021/02/Barbell-Bench-Press.gif">
+
+<div class="exercise-info">
+<h4>Bench Press</h4>
+<p>4 sets × 6 reps • Rest 90s</p>
+</div>
+
+<button class="start-btn">▶</button>
+
+</div>
+
+<div class="exercise">
+
+<img src="https://fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Press.gif">
+
+<div class="exercise-info">
+<h4>Incline Dumbbell Press</h4>
+<p>3 sets × 8 reps • Rest 90s</p>
+</div>
+
+<button class="start-btn">▶</button>
+
+</div>
+
+<div class="exercise">
+
+<img src="https://fitnessprogramer.com/wp-content/uploads/2021/09/Close-grip-Incline-Dumbbell-Press.gif">
+
+<div class="exercise-info">
+<h4>Dips</h4>
+<p>3 sets × 10 reps • Rest 60s</p>
+</div>
+
+<button class="start-btn">▶</button>
+
+</div>
+
+</div>
+
+<div class="card recovery-card">
+<h3>Recovery Status</h3>
+
+<p style="color:#a3ff2f;font-weight:600">Optimal</p>
+
+<p style="font-size:13px;color:var(--muted)">
+Your body is ready for high intensity training today.
+</p>
+
+</div>
+
+<div class="card program-card">
+<h3>Program Library</h3>
+
+<div class="program-grid">
+
+<div class="program">
+<h4>Hypertrophy Builder</h4>
+<p>6 weeks</p>
+<button class="download-btn">Download</button>
+</div>
+
+<div class="program">
+<h4>Strength Cycle</h4>
+<p>4 weeks</p>
+<button class="download-btn">Download</button>
+</div>
+
+<div class="program">
+<h4>Fat Loss Plan</h4>
+<p>5 weeks</p>
+<button class="download-btn">Download</button>
+</div>
+
+<div class="program">
+<h4>Athlete Conditioning</h4>
+<p>Performance</p>
+<button class="download-btn">Download</button>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="programsView" class="programs-view">
+
+<div class="adaptive-header greeting">
+
+<h2>Discover Programs</h2>
+<p>Explore science-based training programs created by coaches.</p>
+
+</div>
+
+<div class="program-filters">
+
+<button class="program-filter">All</button>
+<button class="program-filter">Strength</button>
+<button class="program-filter">Hypertrophy</button>
+<button class="program-filter">Fat Loss</button>
+<button class="program-filter">Athlete</button>
+
+</div>
+
+<div class="programs-grid">
+
+
+<div class="program-card">
+
+<div class="program-badge">Trending</div>
+
+<img src="https://images.unsplash.com/photo-1517960413843-0aee8e2b3285?auto=format&fit=crop&w=800&q=80">
+
+<div class="program-content">
+
+<h3>Hypertrophy Builder</h3>
+
+<div class="program-rating">⭐ 4.8 (124)</div>
+
+<div class="program-stats">
+<span>6 weeks</span>
+<span>4 days/week</span>
+<span>Intermediate</span>
+</div>
+
+<div class="program-bottom">
+<div class="program-price">€19</div>
+<button class="program-btn">View</button>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="program-card">
+
+<div class="program-badge">Science</div>
+
+<img src="https://images.unsplash.com/photo-1599058917765-a780eda07a3e?auto=format&fit=crop&w=800&q=80">
+
+<div class="program-content">
+
+<h3>Fat Loss Plan</h3>
+
+<div class="program-rating">⭐ 4.9 (210)</div>
+
+<div class="program-stats">
+<span>5 weeks</span>
+<span>4 days/week</span>
+<span>All levels</span>
+</div>
+
+<div class="program-bottom">
+<div class="program-price">€14</div>
+<button class="program-btn">View</button>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="program-card">
+
+<div class="program-badge">Verified</div>
+
+<img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80">
+
+<div class="program-content">
+
+<h3>Strength Cycle</h3>
+
+<div class="program-rating">⭐ 4.7 (92)</div>
+
+<div class="program-stats">
+<span>4 weeks</span>
+<span>3 days/week</span>
+<span>Advanced</span>
+</div>
+
+<div class="program-bottom">
+<div class="program-price">€24</div>
+<button class="program-btn">View</button>
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
@@ -781,8 +1337,10 @@ borderWidth:2
 
 options:{
 
-maintainAspectRatio:false,
 
+responsive:true,
+
+maintainAspectRatio:false,
 plugins:{legend:{display:false}},
 
 scales:{
@@ -813,6 +1371,7 @@ max:100
 
 }
 
+
 });
 
 document.addEventListener("click", function(event){
@@ -842,6 +1401,85 @@ sidebar.classList.remove("open");
 }
 
 });
+
+const routines = {
+
+chest:[
+"Bench Press",
+"Incline Dumbbell Press",
+"Chest Fly",
+"Dips"
+],
+
+back:[
+"Pull Ups",
+"Barbell Row",
+"Lat Pulldown",
+"Seated Row"
+],
+
+legs:[
+"Squats",
+"Leg Press",
+"Lunges",
+"Hamstring Curl"
+],
+
+shoulders:[
+"Overhead Press",
+"Lateral Raise",
+"Rear Delt Fly"
+],
+
+arms:[
+"Bicep Curl",
+"Tricep Pushdown",
+"Hammer Curl"
+]
+
+}
+
+function updateRoutine(){
+
+const muscle = document.getElementById("muscleSelect").value
+
+const list = document.getElementById("routineList")
+
+list.innerHTML=""
+
+routines[muscle].forEach(exercise=>{
+const li=document.createElement("li")
+li.textContent=exercise
+list.appendChild(li)
+})
+
+}
+
+function showAdaptive(){
+
+document.querySelector(".dashboard").style.display = "none"
+document.getElementById("adaptiveView").style.display = "block"
+
+closeMenu()
+
+}
+
+function showDashboard(){
+
+document.querySelector(".dashboard").style.display = "block"
+document.getElementById("adaptiveView").style.display = "none"
+
+}
+
+function showPrograms(){
+
+document.querySelector(".dashboard").style.display = "none"
+document.getElementById("adaptiveView").style.display = "none"
+document.getElementById("programsView").style.display = "block"
+
+closeMenu()
+
+}
 
 </script>
 
