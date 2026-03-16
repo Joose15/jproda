@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>jproda</title>
+<title>Jose Peñalba — Builder</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500&display=swap" rel="stylesheet">
 
@@ -197,16 +197,238 @@ font-size:70px;
 margin-top:15px;
 font-weight:700;
 
-background:linear-gradient(90deg,#CBFE00,#9EDB00);
-
--webkit-background-clip:text;
-
-color:transparent;
 color:white;
 
 }
 
-@@ -428,76 +424,181 @@
+.hero p{
+
+margin-top:20px;
+
+font-size:22px;
+
+opacity:0.7;
+
+}
+
+.buttons{
+
+margin-top:40px;
+
+display:flex;
+
+gap:20px;
+
+}
+
+.btn{
+
+padding:14px 30px;
+
+border-radius:14px;
+
+background:linear-gradient(135deg,#CBFE00,#9EDB00);
+
+color:#212121;
+
+font-weight:600;
+
+text-decoration:none;
+
+transition:0.4s;
+
+}
+
+.btn:hover{
+
+transform:translateY(-4px);
+
+box-shadow:0 10px 40px rgba(203,254,0,0.35);
+
+}
+
+
+
+.btn-outline{
+
+background:transparent;
+
+border:1px solid rgba(255,255,255,0.2);
+
+color:white;
+
+}
+
+/* ========================= */
+/* SECTION */
+/* ========================= */
+
+section{
+
+padding:120px 10%;
+
+}
+
+.title{
+
+font-size:40px;
+
+margin-bottom:60px;
+
+}
+
+/* ========================= */
+/* CARDS */
+/* ========================= */
+
+
+.project{
+cursor:pointer;
+}
+.card{
+
+padding:40px;
+
+border-radius:20px;
+
+background:rgba(255,255,255,0.03);
+
+border:1px solid rgba(255,255,255,0.05);
+
+backdrop-filter:blur(10px);
+
+transition:0.4s;
+
+}
+
+.card:hover{
+
+transform:translateY(-10px) scale(1.02);
+
+background:rgba(255,255,255,0.06);
+
+}
+
+/* ========================= */
+/* PROJECTS */
+/* ========================= */
+
+.project{
+
+overflow:hidden;
+
+border-radius:20px;
+
+background:rgba(255,255,255,0.03);
+
+border:1px solid rgba(203,254,0,0.15);
+transition:0.4s;
+
+}
+
+.project:hover{
+
+transform:scale(1.03);
+
+box-shadow:0 10px 35px rgba(203,254,0,0.2);
+
+}
+
+.project-img{
+
+height:200px;
+
+background:linear-gradient(135deg,#CBFE0025,#CBFE0010);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:40px;
+
+}
+
+.project-content{
+
+padding:30px;
+
+}
+
+.project-content p{
+
+opacity:0.7;
+
+}
+
+/* ========================= */
+/* FOOTER */
+/* ========================= */
+
+footer{
+
+text-align:center;
+
+padding:60px;
+
+opacity:0.5;
+
+}
+
+.grid-cards{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:30px;
+
+margin-top:40px;
+
+}
+
+@media(max-width:900px){
+
+.grid-cards{
+grid-template-columns:1fr;
+}
+
+}
+
+.projects-more{
+margin-top:40px;
+display:flex;
+justify-content:center;
+}
+
+.hero-logo{
+
+width:120px;
+margin-bottom:0px;
+
+animation:float 4s ease-in-out infinite;
+
+}
+
+@keyframes float{
+
+0%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-10px);
+}
+
+100%{
+transform:translateY(0px);
+}
+
+}
+
+
+.nav-logo{
 height:50px;
 }
 
@@ -296,8 +518,6 @@ max-width:500px;
 margin:20px auto 0 auto;
 }
 
-.hero-logo{
-width:90px;
 /* LOGO */
 
 .hero-logo-right{
@@ -317,30 +537,20 @@ align-items:center;
 /* NAVBAR */
 
 nav{
-
 top:15px;
-
 padding:10px 15px;
-
 width:90%;
 max-width:90%;
-
 }
 
 nav ul{
-
 gap:15px;
-
 flex-wrap:wrap;
-
 justify-content:center;
-
 }
 
 nav a{
-
 font-size:14px;
-
 padding:6px 10px;
 }
 
@@ -350,35 +560,27 @@ padding:6px 10px;
 grid-template-columns:1fr;
 }
 
-/* BUTTONS */
+
 section{
 padding:80px 20px;
 }
 
-.buttons{
-flex-direction:column;
-gap:12px;
 }
 
-/* PROJECT GRID */
 /* HERO SPLIT */
 
-.grid-cards{
 
-grid-template-columns:1fr;
 
 .hero-text{
 text-align:left;
 }
 
-section{
 .hero-image{
 display:flex;
 justify-content:center;
 align-items:center;
 }
 
-padding:80px 20px;
 
 /* animacion flotante */
 
@@ -409,17 +611,34 @@ text-shadow:
 }
 
 </style>
-@@ -525,10 +626,19 @@
+
+</head>
+
+<body>
+
+<div class="bg"></div>
+<div class="grid"></div>
+
+<nav>
+
+
+<ul>
+
+<li><a href="#">About</a></li>
+<li><a href="#">Skills</a></li>
+<li><a href="#">Projects</a></li>
+<li><a href="#">Contact</a></li>
+
+</ul>
+
+</nav>
 
 <section class="hero">
 
-<img src="img/logo.png" class="hero-logo">
 <div class="hero-container">
 
 <div class="hero-text">
 
-<h1>Jose Peñalba</h1>
-<p>Hardware Builder · Embedded Systems · Tech Products</p>
 <h1>
 Hi, I'm <span class="lime">Jose</span><br>
 Embedded Systems Builder
@@ -432,7 +651,8 @@ industrial communication and real-world devices.
 
 <div class="buttons">
 
-@@ -537,84 +647,94 @@
+<a href="#" class="btn">View Projects</a>
+<a href="#" class="btn btn-outline">Contact</a>
 
 </div>
 
@@ -474,7 +694,7 @@ industrial communication and real-world devices.
 const container = document.getElementById("projects-container")
 
 function shuffle(array) {
-return [...array].sort(() => Math.random() - 0.5)
+  return [...array].sort(() => Math.random() - 0.5)
 }
 
 function renderProjects(){
