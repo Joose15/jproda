@@ -4,11 +4,11 @@ const projects = [
     file: "projects/energy.html"
   },
   {
-    name: "IoT Platform",
+    name: "Gym Dashboard",
     file: "projects/iot.html"
   },
   {
-    name: "Industrial Protocols",
+    name: "Task Dashboards",
     file: "projects/plc.html"
   },
   {
