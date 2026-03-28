@@ -2,277 +2,397 @@
 <html lang="es">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PCF8575 Interactivo + LED</title>
 
-<title>Energy Monitoring System</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
 body{
-
 font-family:'Inter',sans-serif;
 background:#212121;
 color:white;
-line-height:1.7;
-
+margin:0;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 }
 
-/* ========================= */
-/* BACKGROUND */
-/* ========================= */
+/* CHIP */
 
-.bg{
-
-position:fixed;
-width:100%;
-height:100%;
-z-index:-2;
-
-background:
-radial-gradient(circle at 20% 30%, #CBFE0033, transparent 40%),
-radial-gradient(circle at 80% 70%, #CBFE0040, transparent 40%),
-radial-gradient(circle at 50% 50%, #CBFE0025, transparent 50%);
-
-filter:blur(140px);
-
+.chip-wrapper{
+display:flex;
+flex-direction:column;
+align-items:center;
 }
 
-/* ========================= */
-/* NAV */
-/* ========================= */
-
-nav{
-
-position:fixed;
-
-top:25px;
-left:50%;
-
-transform:translateX(-50%);
-
-background:rgba(0,0,0,0.6);
-
-backdrop-filter:blur(20px);
-
-border-radius:40px;
-
-padding:12px 25px;
-
-border:1px solid rgba(255,255,255,0.1);
-
-z-index:100;
-
+.chip{
+position:relative;
+display:flex;
 }
 
-nav a{
+/* CUERPO */
 
-color:#ccc;
-text-decoration:none;
-margin:0 20px;
-
-}
-
-nav a:hover{
-
-color:#CBFE00;
-
-}
-
-/* ========================= */
-/* ARTICLE */
-/* ========================= */
-
-.article{
-
-max-width:900px;
-margin:auto;
-
-padding:160px 20px 120px 20px;
-
-}
-
-/* TITLE */
-
-.article h1{
-
-font-size:52px;
-margin-bottom:20px;
-
-background:linear-gradient(90deg,#CBFE00,#9EDB00);
--webkit-background-clip:text;
-color:transparent;
-
-}
-
-/* META */
-
-.meta{
-
-opacity:0.6;
-margin-bottom:50px;
-
-}
-
-/* PARAGRAPH */
-
-.article p{
-
-font-size:18px;
-margin-bottom:28px;
-
-opacity:0.9;
-
-}
-
-/* IMAGE */
-
-.article img{
-
-width:100%;
-border-radius:12px;
-margin:40px 0;
-
-}
-
-/* CODE BLOCK */
-
-.code{
-
-background:#1b1b1b;
-
-border-radius:12px;
-
-padding:25px;
-
-font-family:monospace;
-
-overflow:auto;
-
-margin:40px 0;
-
+.chip-body{
+width:240px;
+height:490px;
+background:linear-gradient(145deg, #0e0e0e, #1a1a1a);
+border-radius:16px;
 border:1px solid rgba(203,254,0,0.2);
-
-}
-
-/* SECTION TITLES */
-
-.article h2{
-
-margin-top:70px;
-margin-bottom:20px;
-
+display:flex;
+justify-content:center;
+align-items:center;
+font-weight:600;
 color:#CBFE00;
-
+box-shadow:
+0 0 10px rgba(203,254,0,0.15),
+0 0 30px rgba(203,254,0,0.08),
+inset 0 0 20px rgba(255,255,255,0.02);
 }
 
-/* FOOTER */
+.chip-body::before{
+content:"";
+position:absolute;
+width:90%;
+height:90%;
+border-radius:12px;
+border:1px solid rgba(255,255,255,0.04);
+}
 
-.footer{
+/* PINES */
 
+.pins{
+position:absolute;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+height:380px;
+top:20px;
+}
+
+.left{ left:-130px; }
+.right{ right:-130px; }
+
+/* PIN */
+
+.pin{
+display:flex;
+align-items:center;
+gap:10px;
+cursor:pointer;
+}
+
+.pin-box{
+background:#0f0f0f;
+padding:10px 16px;
+border-radius:10px;
+font-size:13px;
+border:1px solid rgba(255,255,255,0.08);
+transition:0.2s;
+min-width:55px;
 text-align:center;
+box-shadow:0 4px 10px rgba(0,0,0,0.4);
+}
 
-padding:60px;
+.pin:hover .pin-box{
+background:#CBFE00;
+color:black;
+box-shadow:0 0 20px rgba(203,254,0,0.4);
+}
 
-opacity:0.5;
+.pin.active .pin-box{
+background:#CBFE00;
+color:black;
+font-weight:600;
+}
 
+.left .pin{ justify-content:flex-end; }
+.right .pin{ justify-content:flex-start; }
+
+/* PATILLA */
+
+.leg{
+width:35px;
+height:2px;
+background:#aaa;
+transition:0.2s;
+}
+
+.pin.active .leg{
+background:#CBFE00;
+}
+
+.number{
+font-size:11px;
+opacity:0.6;
+}
+
+/* INFO */
+
+.info{
+margin-top:30px;
+border-left:3px solid #CBFE00;
+padding-left:15px;
+max-width:320px;
+}
+
+/* ================= LED ================= */
+
+.led-system{
+position:absolute;
+left:-260px;
+top:150px;
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+/* cables */
+
+.wire{
+width:3px;
+background:#888;
+transition:0.2s;
+}
+
+.wire.p1{ height:45px; }
+.wire.gnd{ height:45px; }
+
+/* LED */
+
+.led{
+width:28px;
+height:28px;
+border-radius:50%;
+background:#220000;
+display:flex;
+justify-content:center;
+align-items:center;
+box-shadow:0 0 10px rgba(255,0,0,0.15);
+transition:0.3s;
+}
+
+.led-core{
+width:14px;
+height:14px;
+border-radius:50%;
+background:red;
+opacity:0.2;
+transition:0.3s;
+}
+
+/* resistor */
+
+.resistor{
+width:14px;
+height:42px;
+background:linear-gradient(90deg,#c69c6d,#a67c52);
+border-radius:4px;
+margin:8px 0;
+position:relative;
+}
+
+.resistor::before{
+content:"";
+position:absolute;
+top:10px;
+left:0;
+right:0;
+height:4px;
+background:purple;
+}
+
+.resistor::after{
+content:"";
+position:absolute;
+bottom:10px;
+left:0;
+right:0;
+height:4px;
+background:black;
+}
+
+/* ON STATE */
+
+.led.on{
+background:red;
+box-shadow:0 0 25px red, 0 0 60px red;
+}
+
+.led.on .led-core{
+opacity:1;
+}
+
+.led.on ~ .wire{
+background:#CBFE00;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<div class="bg"></div>
+<div class="chip-wrapper">
 
-<nav>
-<a href="../index.html">Home</a>
-<a href="projects.html">Projects</a>
-</nav>
+<div class="chip">
 
-<div class="article">
-
-<h1>Energy Monitoring System</h1>
-
-<div class="meta">
-Embedded Systems · Power Electronics · IoT
+<!-- LED -->
+<div class="led-system">
+<div class="wire p1"></div>
+<div class="led"><div class="led-core"></div></div>
+<div class="resistor"></div>
+<div class="wire gnd"></div>
 </div>
 
-<p>
-This project explores the design of a modular energy monitoring system capable of measuring voltage, current and power consumption in real time.  
-The goal was to build a flexible platform suitable for industrial installations and smart energy systems.
-</p>
+<!-- PINES IZQUIERDA -->
+<div class="pins left">
 
-<p>
-The system integrates multiple sensors with a microcontroller capable of performing signal acquisition and digital processing. Data can be transmitted to external systems through communication protocols commonly used in industrial environments.
-</p>
-
-<img src="../img/energy-system.jpg">
-
-<h2>Hardware Architecture</h2>
-
-<p>
-The hardware design combines current sensing, voltage measurement and signal conditioning circuits.  
-A dedicated ADC captures the signals which are then processed by the embedded firmware.
-</p>
-
-<div class="code">
-
-STM32H7  
-ADS1115 ADC  
-ACS712 Current Sensor  
-ZMPT101B Voltage Sensor  
-
+<div class="pin" data-info="Salida de interrupción (open-drain)">
+<div class="pin-box">INT</div><div class="leg"></div><span class="number">1</span>
 </div>
 
-<h2>Signal Processing</h2>
+<div class="pin" data-info="Dirección I2C (bit A1)">
+<div class="pin-box">A1</div><div class="leg"></div><span class="number">2</span>
+</div>
 
-<p>
-The firmware performs signal filtering and RMS calculations to obtain accurate electrical measurements.  
-This allows the system to calculate important metrics such as instantaneous power and total energy consumption.
-</p>
+<div class="pin" data-info="Dirección I2C (bit A2)">
+<div class="pin-box">A2</div><div class="leg"></div><span class="number">3</span>
+</div>
 
-<p>
-All measurements are structured in a format suitable for integration with higher level platforms or SCADA systems.
-</p>
+<div class="pin" data-info="GPIO P0">
+<div class="pin-box">P0</div><div class="leg"></div><span class="number">4</span>
+</div>
 
-<h2>Applications</h2>
+<div class="pin" data-info="GPIO P1 (Control LED)">
+<div class="pin-box">P1</div><div class="leg"></div><span class="number">5</span>
+</div>
 
-<p>
-Potential applications of the system include:
-</p>
+<div class="pin" data-info="GPIO P2">
+<div class="pin-box">P2</div><div class="leg"></div><span class="number">6</span>
+</div>
 
-<p>
+<div class="pin" data-info="GPIO P3">
+<div class="pin-box">P3</div><div class="leg"></div><span class="number">7</span>
+</div>
 
-• Smart energy monitoring  
-• Industrial installations  
-• Renewable energy systems  
-• Educational platforms  
+<div class="pin" data-info="GPIO P4">
+<div class="pin-box">P4</div><div class="leg"></div><span class="number">8</span>
+</div>
 
-</p>
+<div class="pin" data-info="GPIO P5">
+<div class="pin-box">P5</div><div class="leg"></div><span class="number">9</span>
+</div>
 
-<h2>Conclusion</h2>
+<div class="pin" data-info="GPIO P6">
+<div class="pin-box">P6</div><div class="leg"></div><span class="number">10</span>
+</div>
 
-<p>
-This project demonstrates how embedded systems can be used to create scalable monitoring platforms for modern electrical infrastructures.
-</p>
+<div class="pin" data-info="GPIO P7">
+<div class="pin-box">P7</div><div class="leg"></div><span class="number">11</span>
+</div>
+
+<div class="pin" data-info="Tierra (GND)">
+<div class="pin-box">GND</div><div class="leg"></div><span class="number">12</span>
+</div>
 
 </div>
 
-<div class="footer">
-© Jose Peñalba
+<!-- CUERPO -->
+<div class="chip-body">
+PCF8575
 </div>
+
+<!-- PINES DERECHA -->
+<div class="pins right">
+
+<div class="pin" data-info="Alimentación (VCC)">
+<span class="number">24</span><div class="leg"></div><div class="pin-box">VCC</div>
+</div>
+
+<div class="pin" data-info="I2C Data (SDA)">
+<span class="number">23</span><div class="leg"></div><div class="pin-box">SDA</div>
+</div>
+
+<div class="pin" data-info="I2C Clock (SCL)">
+<span class="number">22</span><div class="leg"></div><div class="pin-box">SCL</div>
+</div>
+
+<div class="pin" data-info="Dirección I2C (bit A0)">
+<span class="number">21</span><div class="leg"></div><div class="pin-box">A0</div>
+</div>
+
+<div class="pin" data-info="GPIO P17">
+<span class="number">20</span><div class="leg"></div><div class="pin-box">P17</div>
+</div>
+
+<div class="pin" data-info="GPIO P16">
+<span class="number">19</span><div class="leg"></div><div class="pin-box">P16</div>
+</div>
+
+<div class="pin" data-info="GPIO P15">
+<span class="number">18</span><div class="leg"></div><div class="pin-box">P15</div>
+</div>
+
+<div class="pin" data-info="GPIO P14">
+<span class="number">17</span><div class="leg"></div><div class="pin-box">P14</div>
+</div>
+
+<div class="pin" data-info="GPIO P13">
+<span class="number">16</span><div class="leg"></div><div class="pin-box">P13</div>
+</div>
+
+<div class="pin" data-info="GPIO P12">
+<span class="number">15</span><div class="leg"></div><div class="pin-box">P12</div>
+</div>
+
+<div class="pin" data-info="GPIO P11">
+<span class="number">14</span><div class="leg"></div><div class="pin-box">P11</div>
+</div>
+
+<div class="pin" data-info="GPIO P10">
+<span class="number">13</span><div class="leg"></div><div class="pin-box">P10</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="info" id="info">
+Haz clic en un pin
+</div>
+
+</div>
+
+<script>
+
+const pins = document.querySelectorAll(".pin");
+const info = document.getElementById("info");
+const led = document.querySelector(".led");
+
+pins.forEach(pin => {
+
+pin.addEventListener("click", () => {
+
+pins.forEach(p => p.classList.remove("active"));
+pin.classList.add("active");
+
+const name = pin.querySelector('.pin-box').innerText;
+
+info.innerText = name + " → " + pin.dataset.info;
+
+// LED control realista
+if(name === "P1"){
+led.classList.toggle("on");
+}
+
+});
+
+});
+
+</script>
 
 </body>
-
 </html>
