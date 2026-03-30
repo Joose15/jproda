@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCF8575 | Jose Peñalba</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #212121;
+            color: white;
+            margin: 0;
+            overflow-x: hidden;
+            padding-top: 0px;
+        }
+
+        /* BACKGROUND */
+        .bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 20% 30%, #CBFE0033, transparent 40%), radial-gradient(circle at 80% 70%, #CBFE0040, transparent 40%), radial-gradient(circle at 50% 50%, #CBFE0025, transparent 50%);
+            filter: blur(140px);
+            animation: move 18s infinite alternate ease-in-out;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translate(-10%, -10%) scale(1)
+            }
+
+            100% {
+                transform: translate(10%, 10%) scale(1.2)
+            }
+        }
+
+        /* LAYOUT */
+        .wrapper {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 300px;
+            align-items: start;
+            gap: 60px;
+            max-width: 1200px;
+            margin: auto;
+            padding: 1px 1px 60px;
+        }
+
+        /* CONTENIDO */
+        .container {
+            max-width: 1200px;
+            grid-column: 1;
+        }
+
+        h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 50px;
+            color: #CBFE00;
+        }
+
+        p {
+            margin-top: 12px;
+            opacity: 0.75;
+            line-height: 1.6;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        #codigo p {
+            max-width: 680px;
+        }
+
+        ul {
+            margin-top: 10px;
+            padding-left: 20px;
+            opacity: 0.75;
+        }
+
+        pre {
+            margin-top: 15px;
+            background: #111;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(203, 254, 0, 0.2);
+        }
+
+        .highlight {
+            margin-top: 15px;
+            border-left: 3px solid #CBFE00;
+            padding-left: 12px;
+        }
+
+        /* INDICE */
+        .toc {
+            grid-column: 2;
+            position: sticky;
+            top: 120px;
+            height: max-content;
+            padding-left: 20px;
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .toc h3 {
+            font-size: 14px;
+            opacity: 0.5;
+            margin-bottom: 15px;
+        }
+
+        .toc a {
+            display: block;
+            padding: 6px 0;
+            text-decoration: none;
+            color: #888;
+            border-left: 2px solid transparent;
+            padding-left: 12px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .toc a:hover {
+            color: #ccc;
+        }
+
+        .toc a.active {
+            color: #CBFE00;
+            border-left: 2px solid #CBFE00;
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:1000px) {
+
+            /* layout */
+            .wrapper {
+                display: flex;
+                flex-direction: column;
+                padding: 60px 15px;
+                gap: 30px;
+            }
+
+            /* 🔥 TOC como barra superior NO fija */
+            .toc {
+                position: relative;
+                /* 🔥 clave: ya no es sticky */
+                top: auto;
+                order: -1;
+                width: 100%;
+                display: flex;
+                gap: 10px;
+                overflow-x: auto;
+                background: rgba(0, 0, 0, 0.4);
+                /* 🔥 más transparente */
+                backdrop-filter: blur(8px);
+                padding: 10px 15px;
+                border-radius: 0 0 16px 16px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            }
+
+            /* ocultar título */
+            .toc h3 {
+                display: none;
+            }
+
+            /* links */
+            .toc a {
+                white-space: nowrap;
+                font-size: 13px;
+                padding: 6px 10px;
+                color: rgba(255, 255, 255, 0.6);
+                /* 🔥 menos contraste */
+                border-bottom: 2px solid transparent;
+                border-left: none;
+            }
+
+            /* activo */
+            .toc a.active {
+                color: #CBFE00;
+                border-bottom: 2px solid #CBFE00;
+            }
+
+            /* scroll limpio */
+            .toc::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        /* desktop */
+        .toc.mobile {
+            display: none;
+        }
+
+        .toc.desktop {
+            display: block;
+            position: sticky;
+            top: 120px;
+        }
+
+        /* mobile */
+        @media(max-width:1000px) {
+            .toc.desktop {
+                display: none;
+            }
+
+            .toc.mobile {
+                display: flex;
+                position: relative;
+                margin-top: 15px;
+                overflow-x: auto;
+                background: rgba(0, 0, 0, 0.3);
+                padding: 10px;
+                border-radius: 12px;
+            }
+        }
+
+        .interactive-box {
+            margin-top: 30px;
+            padding: 80px 160px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.03);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            overflow: visible;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .info-text {
+            text-align: center;
+            opacity: 0.7;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        /* opcional pro */
+        .info-text::before {
+            content: "|";
+            color: #CBFE00;
+            margin-right: 8px;
+        }
+
+        /* OVERRIDE del segundo HTML */
+        .chip-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chip {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: scale(0.75);
+        }
+
+        /* CUERPO */
+        .chip-body {
+            width: 240px;
+            height: 490px;
+            background: linear-gradient(145deg, #5a5a5a, #1a1a1a);
+            border-radius: 16px;
+            border: 1px solid rgba(203, 254, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            color: #CBFE00;
+            position: relative;
+        }
+
+        .chip-body::before {
+            content: "";
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* PINES */
+        .pins {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 380px;
+            top: 20px;
+            z-index: 2;
+        }
+
+        .left {
+            left: -90px;   /* 🔥 antes -130px */
+        }
+
+        .right {
+            right: -90px;  /* 🔥 antes -130px */
+        }
+
+        /* PIN */
+        .pin {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .pin-box {
+            background: #0f0f0f;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            min-width: 55px;
+            text-align: center;
+        }
+
+        .pin.active .pin-box {
+            background: #CBFE00;
+            color: black;
+            font-weight: 600;
+        }
+
+        .left .pin {
+            justify-content: flex-end;
+            position: relative;
+        }
+
+        .right .pin {
+            justify-content: flex-start;
+        }
+
+        /* PATILLA */
+        .leg {
+            width: 35px;
+            height: 2px;
+            background: #aaa;
+        }
+
+        .pin.active .leg {
+            background: #CBFE00;
+        }
+
+        .number {
+            font-size: 11px;
+            opacity: 0.6;
+        }
+
+        .left .number {
+            position: absolute;
+            right: -30px;
+            /* 👈 ajusta distancia */
+        }
+
+        /* LED */
+        .led-system {
+            position: absolute;
+            left: -200px;
+            top: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .wire {
+            width: 3px;
+            background: #888;
+        }
+
+        .wire.p1 {
+            height: 45px;
+        }
+
+        .wire.gnd {
+            height: 45px;
+        }
+
+        .led {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #220000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .led-core {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: red;
+            opacity: 0.2;
+        }
+
+        .resistor {
+            width: 14px;
+            height: 42px;
+            background: linear-gradient(90deg, #c69c6d, #a67c52);
+            border-radius: 4px;
+            margin: 8px 0;
+        }
+
+        /* LED ON */
+        .led.on {
+            background: red;
+            box-shadow: 0 0 25px red, 0 0 60px red;
+        }
+
+        .led.on .led-core {
+            opacity: 1;
+        }
+
+        /* GRID BACKGROUND */
+        .grid {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .code-block {
+            margin-top: 20px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(203, 254, 0, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02);
+            font-family: monospace;
+        }
+
+        .code-block pre {
+            line-height: 0.5;
+            /* 🔥 antes ~1.6 */
+            font-size: 13px;
+            /* opcional, más compacto */
+        }
+
+        .line {
+            display: flex;
+            align-items: center;
+        }
+
+        /* HEADER */
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 13px;
+            opacity: 0.7;
+        }
+
+        /* BOTÓN */
+        .copy-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #CBFE00;
+            color: black;
+        }
+
+        /* CODE */
+        pre {
+            margin: 0;
+            padding: 15px;
+            overflow-x: auto;
+        }
+
+        /* LINEA */
+        .line {
+            display: flex;
+        }
+
+        /* NUMERO */
+        .num {
+            width: 30px;
+            text-align: right;
+            padding-right: 10px;
+            opacity: 0.3;
+            user-select: none;
+            line-height: 1;
+            /* 🔥 importante */
+        }
+
+        /* TEXTO */
+        .code {
+            white-space: pre;
+            line-height: 1;
+            /* 🔥 evita altura extra */
+        }
+
+        /* COLORES */
+        .kw {
+            color: #CBFE00;
+        }
+
+        /* keywords */
+        .fn {
+            color: #61dafb;
+        }
+
+        /* funciones */
+        .obj {
+            color: #ffcb6b;
+        }
+
+        /* objetos */
+        .type {
+            color: #c792ea;
+        }
+
+        /* tipos */
+        .numv {
+            color: #f78c6c;
+        }
+
+        /* números */
+        .lib {
+            color: #89ddff;
+        }
+
+        /* librerías */
+        .com {
+            color: #6a9955;
+        }
+
+        .highlight a {
+            color: #CBFE00;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .highlight a:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .spec-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(203, 254, 0, 0.15);
+            border-radius: 16px;
+            padding: 22px 20px;
+            /* 🔥 menos padding */
+            backdrop-filter: blur(12px);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            min-height: auto;
+            /* 🔥 QUITA el problema principal */
+        }
+
+        .spec-card:hover {
+            transform: translateY(-4px);
+            border-color: #CBFE00;
+            box-shadow: 0 8px 25px rgba(203, 254, 0, 0.15);
+        }
+
+        .spec-card h3 {
+            color: #CBFE00;
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+
+        .spec-card p {
+            opacity: 0.8;
+            line-height: 1.45;
+            font-size: 14px;
+        }
+
+        .price-table {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .price-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 25px;
+            min-height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* 🔥 centra horizontal */
+            align-items: center;
+            /* 🔥 centra vertical */
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+
+        .price-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            border-color: #CBFE00;
+            box-shadow: 0 10px 30px rgba(203, 254, 0, 0.2);
+        }
+
+        .price-card h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .price {
+            font-size: 26px;
+            font-weight: 600;
+            color: #CBFE00;
+            margin: 10px 0;
+        }
+
+        .price-card a {
+            display: inline-block;
+            margin-top: auto;
+            color: #CBFE00;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .price-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* 🔥 MOBILE FIX REAL */
+        @media(max-width:600px) {
+
+            .spec-vertical {
+                max-width: 100%;
+                gap: 16px;
+            }
+
+            .spec-card {
+                padding: 16px;
+            }
+
+            .spec-card h3 {
+                font-size: 14px;
+            }
+
+            .spec-card p {
+                font-size: 13px;
+                line-height: 1.4;
+            }
+
+            .wrapper {
+                display: flex;
+                flex-direction: column;
+                padding: 80px 20px;
+                gap: 30px;
+            }
+
+            h1 {
+                font-size: 28px;
+                margin-top: 0;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            .spec-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .price-table {
+                grid-template-columns: 1fr;
+            }
+
+            .interactive-box {
+                padding: 20px;
+                overflow-x: auto;
+                overflow: hidden;
+            }
+
+            .spec-vertical {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+                margin: 30px auto;
+                gap: 20px;
+            }
+
+            .chip {
+                transform: scale(0.55);
+                display: grid;
+                grid-template-columns: auto auto auto;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .chip-body {
+                width: 160px;
+                height: 300px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .chip-wrapper {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+
+            .left {
+                order: 1;
+            }
+
+            .chip-body {
+                order: 2;
+            }
+
+            .right {
+                order: 3;
+            }
+
+            .pin {
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+            }
+
+            .pins {
+                position: relative;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .pin-box {
+                padding: 10px 14px;
+                font-size: 12px;
+                min-width: 60px;
+            }
+
+            .leg,
+            .number {
+                display: none;
+            }
+
+            .led-system {
+                position: absolute;
+                left: -80px;
+                top: 120px;
+                transform: scale(0.9);
+            }
+
+            .wrapper,
+            .container,
+            .interactive-box {
+                max-width: 100%;
+                overflow-x: hidden;
+                
+            }
+
+        }
+
+        nav{
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 12px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+            z-index: 100;
+            transition: 0.4s;
+            display: flex;
+            justify-content: center;
+            width: fit-content;   /* 🔥 CLAVE REAL */
+        }
+
+        nav ul {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.7;
+            transition: 0.3s;
+
+            font-size: 16px;
+            padding: 8px 14px;
+            border-radius: 20px;
+        }
+
+        nav a:hover {
+            opacity: 1;
+            color: #CBFE00;
+        }
+
+        nav.scrolled {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .img-center {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .img-center img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            border: 1px solid rgba(203,254,0,0.2);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+    </style>
+</head>
+<div class="bg"></div>
+<div class="grid"></div>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="../projects/projects.html">Projects</a></li>
+        </ul>
+    </nav>
+
+    <div class="wrapper">
+        <div class="toc desktop">
+            <h3>En esta página</h3> <a href="#que">¿Qué es?</a> <a href="#precio">Precio</a> <a
+                href="#funcionamiento">Funcionamiento</a> <a href="#montaje">Montaje</a> <a href="#codigo">Código</a>
+        </div> <!-- CONTENIDO -->
+        <div class="container">
+            <h1>PCF8575: expansión de GPIO por I2C</h1>
+            <div class="toc mobile">
+                <h3>En esta página</h3> <a href="#que">¿Qué es?</a> <a href="#precio">Precio</a> <a
+                    href="#funcionamiento">Funcionamiento</a> <a href="#montaje">Montaje</a> <a
+                    href="#codigo">Código</a>
+            </div>
+            <h2 id="que">¿Qué es el PCF8575?</h2>
+            <p> El PCF8575 es un expansor de entradas y salidas digitales de 16 bits que opera mediante el bus I2C. Su
+                principal ventaja es permitir añadir 16 GPIO adicionales utilizando únicamente dos líneas de
+                comunicación del microcontrolador, como SDA y SCL en plataformas tipo Arduino. </p>
+           
+            <div class="img-center">
+                <img src="img/pcf8575.png" style="width:300px;">
+            </div>
+            
+                <p> La dirección del dispositivo puede configurarse mediante pines dedicados, lo que permite conectar hasta
+                8 unidades en un mismo bus I2C. De este modo, es posible alcanzar un total de 128 líneas de
+                entrada/salida adicionales sin aumentar el número de pines del microcontrolador. </p>
+            <p>
+            <div class="spec-grid spec-vertical">
+                <div class="spec-card">
+                    <h3>Alimentación</h3>
+                    <p>El PCF8575 opera en un rango de tensión de entre <strong>2.5 V y 5.5 V</strong>, lo que permite
+                        su integración tanto en sistemas de 3.3 V como de 5 V.</p>
+                </div>
+                <div class="spec-card">
+                    <h3>Consumo</h3>
+                    <p>El consumo en reposo es extremadamente bajo, del orden de <strong>10 µA</strong>, lo que lo hace
+                        ideal para aplicaciones de bajo consumo o sistemas que se alimentan por batería.</p>
+                </div>
+                <div class="spec-card">
+                    <h3>Capacidad de corriente</h3>
+                    <p>La corriente total suministrada por el dispositivo puede alcanzar aproximadamente <strong>100
+                            mA</strong>, teniendo en cuenta el conjunto de todos los pines.</p>
+                </div>
+            </div>
+            </p>
+            <p> La comunicación se realiza a través de I2C con frecuencias de hasta 400 kHz, lo que facilita su
+                integración en sistemas embebidos sin necesidad de implementar protocolos complejos. </p>
+            <p> El tiempo de conmutación típico es de unos 4 µs. Aunque puede emplearse para generar señales digitales
+                de baja frecuencia, no es adecuado para aplicaciones que requieran PWM de alta velocidad, debido a las
+                limitaciones inherentes al bus I2C. </p>
+            <div class="highlight"> No añade pines → cambia la arquitectura del sistema. </div>
+            <h2 id="precio">Precio</h2>
+            <p> El PCF8575 es un componente económico y ampliamente disponible. A continuación se muestra una
+                comparativa entre distintos fabricantes y distribuidores. </p>
+            <div class="price-table">
+                <div class="price-card">
+                    <h3>Texas Instruments</h3>
+                    <p class="price">2.50€</p> <a href="https://www.ti.com/product/PCF8575" target="_blank">Ver
+                        producto</a>
+                </div>
+                <div class="price-card">
+                    <h3>Mouser Electroincs</h3>
+                    <p class="price">2,37€</p> <a href="https://www.mouser.es/ProductDetail/NXP-Semiconductors/PCF8575TS-1112?qs=LOCUfHb8d9vJzKldbVRCSg%3D%3D&utm_id=9882080341&utm_source=google&utm_medium=cpc&utm_marketing_tactic=emeacorp&gad_source=1&gad_campaignid=9882080341&gclid=Cj0KCQjwm6POBhCrARIsAIG58CI23-JezrAwCSmJbF8KPUi51NvaDjUjeU2fRh7f2EBmUgzRzsAhftUaAtx4EALw_wcB%22
+                        target=" _blank">Ver producto</a>
+                </div>
+                <div class="price-card">
+                    <h3>RS Iberia</h3>
+                    <p class="price">3,85€</p> <a href="https://es.rs-online.com/web/p/expansores-e-s/4368344"
+                        target="_blank">Ver módulos</a>
+                </div>
+            </div>
+            <h2 id="funcionamiento">¿Cómo funciona?</h2>
+            <div class="highlight">
+            El PCF8575 no es un GPIO convencional → funciona como un registro remoto controlado por I2C.
+            </div>
+
+            <p>
+            El dispositivo internamente tiene un registro de 16 bits conectado directamente a los pines. 
+            Cada bit controla un pin físico (P0–P17), por lo que cuando escribes datos, en realidad estás 
+            modificando ese registro.
+            </p>
+
+            <p>
+            La comunicación es muy simple: el microcontrolador envía dos bytes seguidos. El primero afecta 
+            a los pines P0–P7 y el segundo a P10–P17. Estos valores se guardan en un <strong>latch interno</strong>, 
+            lo que permite que el estado de los pines se mantenga sin necesidad de comunicación continua.
+            </p>
+
+            <p>
+            Una de sus particularidades es que no existe configuración clásica de entrada o salida. 
+            Los pines son <strong>cuasi-bidireccionales</strong>, lo que simplifica mucho su uso:
+            </p>
+
+            <div class="highlight">
+            Escribir HIGH → el pin actúa como entrada<br>
+            Escribir LOW o HIGH → el pin actúa como salida
+            </div>
+
+            <p>
+            Internamente, cada pin tiene una pequeña corriente hacia VCC, lo que permite leer niveles altos 
+            cuando se utiliza como entrada sin necesidad de resistencias externas en muchos casos.
+            </p>
+
+            <p>
+            Cuando escribes un valor, este pasa por un registro interno, se almacena y se refleja directamente 
+            en los pines. No hay capas intermedias ni configuraciones complejas.
+            </p>
+
+            <p>
+            Además, el PCF8575 dispone de una salida de interrupción (<strong>INT</strong>) que se activa cuando 
+            cambia el estado de un pin de entrada, evitando tener que estar leyendo continuamente el dispositivo.
+            </p>
+
+            <div class="highlight">
+            No configuras pines → escribes y lees directamente su estado
+            </div>
+
+            <p>
+            En lectura, el proceso es igual de directo: el microcontrolador solicita los datos y recibe el estado 
+            actual de todos los pines en dos bytes.
+            </p>
+            <h2 id="montaje">Esquema de montaje</h2>
+            <div class="highlight"> La dirección se configura con A0, A1 y A2 </div>
+            <div class="chip-wrapper">
+                <div class="interactive-box">
+                    <div class="chip"> <!-- LED -->
+                        <div class="led-system">
+                            <div class="wire p1"></div>
+                            <div class="led">
+                                <div class="led-core"></div>
+                            </div>
+                            <div class="resistor"></div>
+                            <div class="wire gnd"></div>
+                        </div> <!-- PINES IZQUIERDA -->
+                        <div class="pins left">
+                            <div class="pin" data-info="Salida de interrupción (open-drain)">
+                                <div class="pin-box">INT</div>
+                                <div class="leg"></div><span class="number">1</span>
+                            </div>
+                            <div class="pin" data-info="Dirección I2C (bit A1)">
+                                <div class="pin-box">A1</div>
+                                <div class="leg"></div><span class="number">2</span>
+                            </div>
+                            <div class="pin" data-info="Dirección I2C (bit A2)">
+                                <div class="pin-box">A2</div>
+                                <div class="leg"></div><span class="number">3</span>
+                            </div>
+                            <div class="pin" data-info="GPIO P0">
+                                <div class="pin-box">P0</div>
+                                <div class="leg"></div><span class="number">4</span>
+                            </div>
+                            <div class="pin" data-info="GPIO P1 (Control LED)" data-pin="P1">
+                                <div class="pin-box">P1</div>
+                                <div class="leg"></div><span class="number">5</span>
+                            </div>
+                            <div class="pin" data-info="GPIO P2">
+                                <div class="pin-box">P2</div>
+                                <div class="leg"></div><span class="number">6</span>
+                            </div>
+                            <div class="pin" data-info="GPIO P3">
+                                <div class="pin-box">P3</div>
+                                <div class="leg"></div><span class="number">7</span>
+                            </div>
+                            <div class="pin" data-info="GPIO P4">
+                                <div class="pin-box">P4</div>
+                                <div class="leg"></div><span class="number">8</span>
+                            </div>
+                            <div class="pin" data-info="GPIO P5">
+                                <div class="pin-box">P5</div>
+                                <div class="leg"></div><span class="number">9</span>
+                            </div>
+                            <div class="pin" data-info="GPIO P6">
+                                <div class="pin-box">P6</div>
+                                <div class="leg"></div><span class="number">10</span>
+                            </div>
+                            <div class="pin" data-info="GPIO P7">
+                                <div class="pin-box">P7</div>
+                                <div class="leg"></div><span class="number">11</span>
+                            </div>
+                            <div class="pin" data-info="Tierra (GND)">
+                                <div class="pin-box">GND</div>
+                                <div class="leg"></div><span class="number">12</span>
+                            </div>
+                        </div> <!-- CUERPO -->
+                        <div class="chip-body"> PCF8575 </div> <!-- PINES DERECHA -->
+                        <div class="pins right">
+                            <div class="pin" data-info="Alimentación (VCC)"> <span class="number">24</span>
+                                <div class="leg"></div>
+                                <div class="pin-box">VCC</div>
+                            </div>
+                            <div class="pin" data-info="I2C Data (SDA)"> <span class="number">23</span>
+                                <div class="leg"></div>
+                                <div class="pin-box">SDA</div>
+                            </div>
+                            <div class="pin" data-info="I2C Clock (SCL)"> <span class="number">22</span>
+                                <div class="leg"></div>
+                                <div class="pin-box">SCL</div>
+                            </div>
+                            <div class="pin" data-info="Dirección I2C (bit A0)"> <span class="number">21</span>
+                                <div class="leg"></div>
+                                <div class="pin-box">A0</div>
+                            </div>
+                            <div class="pin" data-info="GPIO P17"> <span class="number">20</span>
+                                <div class="leg"></div>
+                                <div class="pin-box">P17</div>
+                            </div>
+                            <div class="pin" data-info="GPIO P16"> <span class="number">19</span>
+                                <div class="leg"></div>
+                                <div class="pin-box">P16</div>
+                            </div>
+                            <div class="pin" data-info="GPIO P15"> <span class="number">18</span>
+                                <div class="leg"></div>
+                                <div class="pin-box">P15</div>
+                            </div>
+                            <div class="pin" data-info="GPIO P14"> <span class="number">17</span>
+                                <div class="leg"></div>
+                                <div class="pin-box">P14</div>
+                            </div>
+                            <div class="pin" data-info="GPIO P13"> <span class="number">16</span>
+                                <div class="leg"></div>
+                                <div class="pin-box">P13</div>
+                            </div>
+                            <div class="pin" data-info="GPIO P12"> <span class="number">15</span>
+                                <div class="leg"></div>
+                                <div class="pin-box">P12</div>
+                            </div>
+                            <div class="pin" data-info="GPIO P11"> <span class="number">14</span>
+                                <div class="leg"></div>
+                                <div class="pin-box">P11</div>
+                            </div>
+                            <div class="pin" data-info="GPIO P10"> <span class="number">13</span>
+                                <div class="leg"></div>
+                                <div class="pin-box">P10</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="info" class="info-text"> Haz clic en un pin </div>
+                </div>
+            </div>
+            <h2 id="codigo">Ejemplo de código</h2>
+            <p> En este ejemplo se utiliza el PCF8575 no solo como expansor de salidas, sino también como interfaz de
+                entrada. </p>
+            <p> Se configura el pin P1 como entrada, al que se conecta un pulsador, y el pin P0 como salida, donde se
+                encuentra el LED. </p>
+            <p> En cada iteración del programa, se lee el estado de P1 mediante digitalRead(). Si el pulsador está
+                activo (nivel alto), se escribe un nivel alto en P0, encendiendo el LED. En caso contrario, el LED
+                permanece apagado. </p>
+            <p> Este comportamiento refleja una característica clave del PCF8575: sus pines son cuasi-bidireccionales,
+                lo que permite usarlos dinámicamente como entrada o salida sin hardware adicional complejo. </p>
+            <p> Este tipo de configuración es especialmente útil cuando se necesita ampliar el número de
+                entradas/salidas de un microcontrolador manteniendo una arquitectura simple basada en I2C. </p>
+            <div class="highlight"> La librería utilizada es la desarrollada por Xreef, cuyo código se puede encontrar
+                en el enlace de su github: <a href="https://github.com/xreef/PCF8575_library" target="_blank"> PCF8575
+                    Library</a>. </div>
+            <div class="code-block">
+                <div class="code-header"> <span>Arduino</span> <button class="copy-btn"
+                        onclick="copyCode()">Copiar</button> </div>
+                <pre><code id="code"> <span class="line"><span class="num">1</span><span class="code"><span class="kw">#include</span> &lt;<span class="lib">PCF8575.h</span>&gt;</span></span> <span class="line"><span class="num">2</span><span class="code"><span class="com">// Dirección I2C del PCF8575</span></span></span> <span class="line"><span class="num">3</span><span class="code"><span class="type">PCF8575</span> <span class="obj">pcf8575</span>(<span class="numv">0x20</span>);</span></span> <span class="line"><span class="num">4</span><span class="code"></span></span> <span class="line"><span class="num">5</span><span class="code"><span class="kw">void</span> <span class="fn">setup</span>() {</span></span> <span class="line"><span class="num">6</span><span class="code"> <span class="obj">Serial</span>.<span class="fn">begin</span>(<span class="numv">115200</span>);</span></span> <span class="line"><span class="num">7</span><span class="code"> <span class="com">// P1 como entrada (botón)</span></span></span> <span class="line"><span class="num">8</span><span class="code"> <span class="obj">pcf8575</span>.<span class="fn">pinMode</span>(<span class="obj">P1</span>, <span class="obj">INPUT</span>);</span></span> <span class="line"><span class="num">9</span><span class="code"> <span class="com">// P0 como salida (LED)</span></span></span> <span class="line"><span class="num">10</span><span class="code"> <span class="obj">pcf8575</span>.<span class="fn">pinMode</span>(<span class="obj">P0</span>, <span class="obj">OUTPUT</span>);</span></span> <span class="line"><span class="num">11</span><span class="code"> <span class="obj">pcf8575</span>.<span class="fn">begin</span>();</span></span> <span class="line"><span class="num">12</span><span class="code">}</span></span> <span class="line"><span class="num">13</span><span class="code"></span></span> <span class="line"><span class="num">14</span><span class="code"><span class="kw">void</span> <span class="fn">loop</span>() {</span></span> <span class="line"><span class="num">15</span><span class="code"> <span class="type">bool</span> <span class="obj">estado</span> = <span class="obj">pcf8575</span>.<span class="fn">digitalRead</span>(<span class="obj">P1</span>);</span></span> <span class="line"><span class="num">16</span><span class="code"> <span class="kw">if</span>(<span class="obj">estado</span> == <span class="obj">HIGH</span>) {</span></span> <span class="line"><span class="num">17</span><span class="code"> <span class="obj">pcf8575</span>.<span class="fn">digitalWrite</span>(<span class="obj">P0</span>, <span class="obj">HIGH</span>);</span></span> <span class="line"><span class="num">18</span><span class="code"> } <span class="kw">else</span> {</span></span> <span class="line"><span class="num">19</span><span class="code"> <span class="obj">pcf8575</span>.<span class="fn">digitalWrite</span>(<span class="obj">P0</span>, <span class="obj">LOW</span>);</span></span> <span class="line"><span class="num">20</span><span class="code"> }</span></span> <span class="line"><span class="num">21</span><span class="code">}</span></span> </code></pre>
+            </div>
+        </div> <!-- INDICE -->
+        <script>
+
+            // =========================
+            // 📌 TOC DINÁMICO (SCROLL)
+            // =========================
+            const sections = document.querySelectorAll("h2");
+            const links = document.querySelectorAll(".toc a");
+
+            window.addEventListener("scroll", () => {
+
+                let current = "";
+
+                sections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+
+                    if (rect.top <= 150) {
+                        current = section.id;
+                    }
+                });
+
+                links.forEach(link => {
+                    link.classList.remove("active");
+
+                    if (link.getAttribute("href") === "#" + current) {
+                        link.classList.add("active");
+                    }
+                });
+            });
+
+
+            // =========================
+            // 🔌 INTERACTIVO PINES
+            // =========================
+            const pins = document.querySelectorAll(".pin");
+            const info = document.getElementById("info");
+            const led = document.querySelector(".led");
+
+            pins.forEach(pin => {
+                pin.addEventListener("click", () => {
+
+                    // reset estado visual
+                    pins.forEach(p => p.classList.remove("active"));
+                    pin.classList.add("active");
+
+                    // datos
+                    const name = pin.dataset.pin || pin.querySelector('.pin-box').innerText;
+                    const desc = pin.dataset.info || "Sin descripción";
+
+                    // mostrar info
+                    info.innerText = name + " → " + desc;
+
+                    // LED toggle SOLO en P1
+                    if (name === "P1") {
+                        led.classList.toggle("on");
+                    }
+                });
+            });
+
+
+            // =========================
+            // 📋 COPY CODE
+            // =========================
+            function copyCode() {
+
+                const code = document.getElementById("code").innerText;
+                navigator.clipboard.writeText(code);
+
+                const btn = document.querySelector(".copy-btn");
+                btn.innerText = "Copiado!";
+
+                setTimeout(() => {
+                    btn.innerText = "Copiar";
+                }, 1500);
+            }
+
+            window.addEventListener("scroll", function () {
+
+                const nav = document.querySelector("nav")
+
+                if (window.scrollY > 50) {
+                    nav.classList.add("scrolled")
+                } else {
+                    nav.classList.remove("scrolled")
+                }
+
+            })
+
+        </script>
+</body>
+
+</html>
