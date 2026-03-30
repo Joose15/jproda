@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Jose Peñalba — Builder</title>
+<title>JProda</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500&display=swap" rel="stylesheet">
 
@@ -610,6 +610,93 @@ text-shadow:
 
 }
 
+.project-single{
+position:relative;
+height:320px;
+border-radius:20px;
+overflow:hidden;
+
+border:1px solid rgba(203,254,0,0.15);
+
+cursor:pointer;
+transition:0.4s;
+}
+
+.project-single:hover{
+transform:scale(1.03);
+box-shadow:0 10px 40px rgba(203,254,0,0.25);
+}
+
+/* imagen fondo */
+
+.project-bg{
+position:absolute;
+width:100%;
+height:100%;
+object-fit:cover;
+top:0;
+left:0;
+filter:brightness(0.6);
+}
+
+/* overlay glass */
+
+.project-overlay{
+position:absolute;
+width:100%;
+height:100%;
+
+display:flex;
+flex-direction:column;
+justify-content:flex-end;
+
+padding:25px;
+
+background:linear-gradient(
+to top,
+rgba(0,0,0,0.8),
+rgba(0,0,0,0.2),
+transparent
+);
+}
+
+/* texto */
+
+.project-overlay h3{
+font-size:22px;
+margin-bottom:5px;
+}
+
+.project-overlay p{
+opacity:0.7;
+margin-bottom:15px;
+}
+
+/* botón */
+
+.btn-project{
+display:inline-block;
+padding:10px 20px;
+border-radius:10px;
+
+background:rgba(203,254,0,0.15);
+border:1px solid rgba(203,254,0,0.3);
+
+color:#CBFE00;
+text-decoration:none;
+
+backdrop-filter:blur(10px);
+
+transition:0.3s;
+}
+
+.btn-project:hover{
+background:#CBFE00;
+color:#212121;
+box-shadow:0 0 20px rgba(203,254,0,0.4);
+}
+
+
 </style>
 
 </head>
@@ -673,10 +760,19 @@ industrial communication and real-world devices.
 
 <h2 class="title">Relevant Projects</h2>
 
-<div id="projects-container" class="grid-cards"></div>
+<div class="project-single">
+    <img src="img/pcf8575.png" class="project-bg">
 
-<div class="projects-more">
-<a href="projects/projects.html" class="btn">View More Projects</a>
+    <div class="project-overlay">
+
+        <h3>PCF8575</h3>
+        <p>Expansión de GPIO por I2C</p>
+
+        <a href="projects/pcf8575.html" class="btn-project">
+            Leer más
+        </a>
+
+    </div>
 </div>
 
 </section>
