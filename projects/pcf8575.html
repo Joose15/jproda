@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PCF8575 | Jose Peñalba</title>
+    <title>PCF8575</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -62,8 +62,9 @@
 
         h1 {
             font-size: 42px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
+
 
         h2 {
             margin-top: 50px;
@@ -799,6 +800,13 @@
                 overflow-x: hidden;
                 
             }
+            .post-meta {
+                    justify-content: center;
+                    text-align: center;
+                    width: 100%;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
 
         }
 
@@ -865,7 +873,60 @@
             border: 1px solid rgba(203,254,0,0.2);
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;   /* 👈 positivo */
+            margin-bottom: 30px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
 
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            line-height: 1;
+        }
+
+        /* separador */
+        .separator {
+            opacity: 0.3;
+        }
+
+        /* nivel */
+        .level {
+            gap: 8px;
+        }
+
+        /* barras tipo señal */
+        .bars {
+            display: flex;
+            gap: 3px;
+            align-items: flex-end;
+        }
+
+        .bars span {
+            width: 3px;
+            background: #CBFE00;
+            border-radius: 2px;
+        }
+
+        /* alturas tipo "señal" */
+        .bars span:nth-child(1) {
+            height: 6px;
+            opacity: 0.5;
+        }
+
+        .bars span:nth-child(2) {
+            height: 10px;
+            opacity: 0.7;
+        }
+
+        .bars span:nth-child(3) {
+            height: 14px;
+        }
     </style>
 </head>
 <div class="bg"></div>
@@ -885,12 +946,31 @@
         </div> <!-- CONTENIDO -->
         <div class="container">
             <h1>PCF8575: expansión de GPIO por I2C</h1>
+            
+            <div class="post-meta">
+                <span class="meta-item">
+                    ⏱ 4 min
+                </span>
+
+                <span class="separator">|</span>
+
+                <span class="meta-item level">
+                    <span class="bars">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                    Intermedio
+                </span>
+            </div>
+
             <div class="toc mobile">
                 <h3>En esta página</h3> <a href="#que">¿Qué es?</a> <a href="#precio">Precio</a> <a
                     href="#funcionamiento">Funcionamiento</a> <a href="#montaje">Montaje</a> <a
                     href="#codigo">Código</a>
             </div>
             <h2 id="que">¿Qué es el PCF8575?</h2>
+            
             <p> El PCF8575 es un expansor de entradas y salidas digitales de 16 bits que opera mediante el bus I2C. Su
                 principal ventaja es permitir añadir 16 GPIO adicionales utilizando únicamente dos líneas de
                 comunicación del microcontrolador, como SDA y SCL en plataformas tipo Arduino. </p>
