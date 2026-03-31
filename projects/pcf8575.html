@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PCF8575</title>
+   <title>PCF8575 | JProda</title>
+    <link rel="icon" href="img/favicon.png" sizes="32x32">
+    <link rel="icon" href="img/favicon.png" sizes="16x16">
+    <link rel="apple-touch-icon" href="img/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -712,12 +715,6 @@
                 grid-template-columns: 1fr;
             }
 
-            .interactive-box {
-                padding: 20px;
-                overflow-x: auto;
-                overflow: hidden;
-            }
-
             .spec-vertical {
                 grid-template-columns: 1fr;
                 max-width: 600px;
@@ -726,64 +723,9 @@
             }
 
             .chip {
-                transform: scale(0.55);
-                display: grid;
-                grid-template-columns: auto auto auto;
-                align-items: center;
-                justify-content: center;
-                gap: 20px;
-            }
-
-            .chip-body {
-                width: 160px;
-                height: 300px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-            }
-
-            .chip-wrapper {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-            }
-
-            .left {
-                order: 1;
-            }
-
-            .chip-body {
-                order: 2;
-            }
-
-            .right {
-                order: 3;
-            }
-
-            .pin {
-                flex-direction: column;
-                align-items: center;
-                gap: 4px;
-            }
-
-            .pins {
-                position: relative;
-                height: auto;
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .pin-box {
-                padding: 10px 14px;
-                font-size: 12px;
-                min-width: 60px;
-            }
-
-            .leg,
-            .number {
-                display: none;
+                transform: scale(0.65);
+                transform-origin: top center; 
+                margin-bottom: -120px;
             }
 
             .led-system {
@@ -800,6 +742,14 @@
                 overflow-x: hidden;
                 
             }
+                
+            .interactive-box {
+                padding: 40px 160px 20px; 
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;       
+                flex-direction: column;
+            }
             .post-meta {
                     justify-content: center;
                     text-align: center;
@@ -807,7 +757,12 @@
                     margin-left: auto;
                     margin-right: auto;
                 }
-
+            .led-system{
+                position: absolute;
+                left: -140px;   
+                top: 50%;       
+                transform: translateY(-50%);
+            }
         }
 
         nav{
