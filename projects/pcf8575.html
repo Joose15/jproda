@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>PCF8575 | JProda</title>
-    <link rel="icon" href="img/logo.png" sizes="32x32">
-    <link rel="icon" href="img/logo.png" sizes="16x16">
-    <link rel="apple-touch-icon" href="img/logo.png">
+    <title>PCF8575 | Jose Peñalba</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -65,9 +62,8 @@
 
         h1 {
             font-size: 42px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
-
 
         h2 {
             margin-top: 50px;
@@ -142,10 +138,8 @@
             border-left: 2px solid #CBFE00;
         }
 
-        /* RESPONSIVE */
         @media(max-width:1000px) {
 
-            /* layout */
             .wrapper {
                 display: flex;
                 flex-direction: column;
@@ -153,10 +147,8 @@
                 gap: 30px;
             }
 
-            /* 🔥 TOC como barra superior NO fija */
             .toc {
                 position: relative;
-                /* 🔥 clave: ya no es sticky */
                 top: auto;
                 order: -1;
                 width: 100%;
@@ -164,42 +156,35 @@
                 gap: 10px;
                 overflow-x: auto;
                 background: rgba(0, 0, 0, 0.4);
-                /* 🔥 más transparente */
                 backdrop-filter: blur(8px);
                 padding: 10px 15px;
                 border-radius: 0 0 16px 16px;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             }
 
-            /* ocultar título */
             .toc h3 {
                 display: none;
             }
 
-            /* links */
             .toc a {
                 white-space: nowrap;
                 font-size: 13px;
                 padding: 6px 10px;
                 color: rgba(255, 255, 255, 0.6);
-                /* 🔥 menos contraste */
                 border-bottom: 2px solid transparent;
                 border-left: none;
             }
 
-            /* activo */
             .toc a.active {
                 color: #CBFE00;
                 border-bottom: 2px solid #CBFE00;
             }
 
-            /* scroll limpio */
             .toc::-webkit-scrollbar {
                 display: none;
             }
         }
 
-        /* desktop */
         .toc.mobile {
             display: none;
         }
@@ -210,7 +195,6 @@
             top: 120px;
         }
 
-        /* mobile */
         @media(max-width:1000px) {
             .toc.desktop {
                 display: none;
@@ -229,7 +213,7 @@
 
         .interactive-box {
             margin-top: 30px;
-            padding: 60px 20px;
+            padding: 80px 160px;
             position: relative;
             background: rgba(255, 255, 255, 0.04);
             backdrop-filter: blur(20px);
@@ -250,21 +234,17 @@
 
         .info-text {
             text-align: center;
-            width: 100%;
             opacity: 0.7;
             font-size: 14px;
             letter-spacing: 0.5px;
-            display: block;
         }
 
-        /* opcional pro */
         .info-text::before {
             content: "|";
             color: #CBFE00;
             margin-right: 8px;
         }
 
-        /* OVERRIDE del segundo HTML */
         .chip-wrapper {
             display: flex;
             flex-direction: column;
@@ -279,7 +259,6 @@
             transform: scale(0.75);
         }
 
-        /* CUERPO */
         .chip-body {
             width: 240px;
             height: 490px;
@@ -303,7 +282,6 @@
             border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        /* PINES */
         .pins {
             position: absolute;
             display: flex;
@@ -315,14 +293,13 @@
         }
 
         .left {
-            left: -90px;   /* 🔥 antes -130px */
+            left: -90px;   
         }
 
         .right {
-            right: -90px;  /* 🔥 antes -130px */
+            right: -90px; 
         }
 
-        /* PIN */
         .pin {
             display: flex;
             align-items: center;
@@ -355,7 +332,6 @@
             justify-content: flex-start;
         }
 
-        /* PATILLA */
         .leg {
             width: 35px;
             height: 2px;
@@ -374,10 +350,8 @@
         .left .number {
             position: absolute;
             right: -30px;
-            /* 👈 ajusta distancia */
         }
 
-        /* LED */
         .led-system {
             position: absolute;
             left: -200px;
@@ -426,7 +400,6 @@
             margin: 8px 0;
         }
 
-        /* LED ON */
         .led.on {
             background: red;
             box-shadow: 0 0 25px red, 0 0 60px red;
@@ -436,7 +409,6 @@
             opacity: 1;
         }
 
-        /* GRID BACKGROUND */
         .grid {
             position: fixed;
             width: 100%;
@@ -459,9 +431,7 @@
 
         .code-block pre {
             line-height: 0.5;
-            /* 🔥 antes ~1.6 */
             font-size: 13px;
-            /* opcional, más compacto */
         }
 
         .line {
@@ -469,7 +439,6 @@
             align-items: center;
         }
 
-        /* HEADER */
         .code-header {
             display: flex;
             justify-content: space-between;
@@ -481,7 +450,6 @@
             opacity: 0.7;
         }
 
-        /* BOTÓN */
         .copy-btn {
             background: transparent;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -497,19 +465,16 @@
             color: black;
         }
 
-        /* CODE */
         pre {
             margin: 0;
             padding: 15px;
             overflow-x: auto;
         }
 
-        /* LINEA */
         .line {
             display: flex;
         }
 
-        /* NUMERO */
         .num {
             width: 30px;
             text-align: right;
@@ -517,47 +482,37 @@
             opacity: 0.3;
             user-select: none;
             line-height: 1;
-            /* 🔥 importante */
         }
 
-        /* TEXTO */
         .code {
             white-space: pre;
             line-height: 1;
-            /* 🔥 evita altura extra */
         }
 
-        /* COLORES */
         .kw {
             color: #CBFE00;
         }
 
-        /* keywords */
         .fn {
             color: #61dafb;
         }
 
-        /* funciones */
         .obj {
             color: #ffcb6b;
         }
 
-        /* objetos */
         .type {
             color: #c792ea;
         }
 
-        /* tipos */
         .numv {
             color: #f78c6c;
         }
 
-        /* números */
         .lib {
             color: #89ddff;
         }
 
-        /* librerías */
         .com {
             color: #6a9955;
         }
@@ -586,14 +541,12 @@
             border: 1px solid rgba(203, 254, 0, 0.15);
             border-radius: 16px;
             padding: 22px 20px;
-            /* 🔥 menos padding */
             backdrop-filter: blur(12px);
             transition: 0.3s;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             min-height: auto;
-            /* 🔥 QUITA el problema principal */
         }
 
         .spec-card:hover {
@@ -630,9 +583,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            /* 🔥 centra horizontal */
             align-items: center;
-            /* 🔥 centra vertical */
             text-align: center;
             backdrop-filter: blur(10px);
             transition: 0.3s;
@@ -668,7 +619,6 @@
             text-decoration: underline;
         }
 
-        /* 🔥 MOBILE FIX REAL */
         @media(max-width:600px) {
 
             .spec-vertical {
@@ -717,6 +667,12 @@
                 grid-template-columns: 1fr;
             }
 
+            .interactive-box {
+                padding: 20px;
+                overflow-x: auto;
+                overflow: hidden;
+            }
+
             .spec-vertical {
                 grid-template-columns: 1fr;
                 max-width: 600px;
@@ -725,9 +681,64 @@
             }
 
             .chip {
-                transform: scale(0.65);
-                transform-origin: top center; 
-                margin-bottom: -120px;
+                transform: scale(0.55);
+                display: grid;
+                grid-template-columns: auto auto auto;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .chip-body {
+                width: 160px;
+                height: 300px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .chip-wrapper {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+
+            .left {
+                order: 1;
+            }
+
+            .chip-body {
+                order: 2;
+            }
+
+            .right {
+                order: 3;
+            }
+
+            .pin {
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+            }
+
+            .pins {
+                position: relative;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .pin-box {
+                padding: 10px 14px;
+                font-size: 12px;
+                min-width: 60px;
+            }
+
+            .leg,
+            .number {
+                display: none;
             }
 
             .led-system {
@@ -744,34 +755,7 @@
                 overflow-x: hidden;
                 
             }
-                
-            .interactive-box {
-                padding: 20px -20px 20px; 
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;       
-                flex-direction: column;
-                
-            }
-            .post-meta {
-                    justify-content: center;
-                    text-align: center;
-                    width: 100%;
-                    margin-left: auto;
-                    margin-right: auto;
-                }
-            .led-system{
-                position: absolute;
-                left: -140px;   
-                top: 50%;       
-                transform: translateY(-50%);
-            }
-            .info-text{
-                width: 100%;
-                display: block;
-                text-align: center;
-                padding: 10px 0;
-        }
+
         }
 
         nav{
@@ -789,7 +773,7 @@
             transition: 0.4s;
             display: flex;
             justify-content: center;
-            width: fit-content;   /* 🔥 CLAVE REAL */
+            width: fit-content;   
         }
 
         nav ul {
@@ -837,60 +821,7 @@
             border: 1px solid rgba(203,254,0,0.2);
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
-        .post-meta {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;   /* 👈 positivo */
-            margin-bottom: 30px;
-            font-size: 14px;
-            opacity: 0.7;
-        }
 
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            line-height: 1;
-        }
-
-        /* separador */
-        .separator {
-            opacity: 0.3;
-        }
-
-        /* nivel */
-        .level {
-            gap: 8px;
-        }
-
-        /* barras tipo señal */
-        .bars {
-            display: flex;
-            gap: 3px;
-            align-items: flex-end;
-        }
-
-        .bars span {
-            width: 3px;
-            background: #CBFE00;
-            border-radius: 2px;
-        }
-
-        /* alturas tipo "señal" */
-        .bars span:nth-child(1) {
-            height: 6px;
-            opacity: 0.5;
-        }
-
-        .bars span:nth-child(2) {
-            height: 10px;
-            opacity: 0.7;
-        }
-
-        .bars span:nth-child(3) {
-            height: 14px;
-        }
     </style>
 </head>
 <div class="bg"></div>
@@ -899,7 +830,8 @@
 <body>
     <nav>
         <ul>
-            <a href="../index.html">Home</a>
+            <li><a href="/index.html">Home</a></li>
+            <li><a href="../projects/projects.html">Projects</a></li>
         </ul>
     </nav>
 
@@ -910,31 +842,12 @@
         </div> <!-- CONTENIDO -->
         <div class="container">
             <h1>PCF8575: expansión de GPIO por I2C</h1>
-            
-            <div class="post-meta">
-                <span class="meta-item">
-                    ⏱ 4 min
-                </span>
-
-                <span class="separator">|</span>
-
-                <span class="meta-item level">
-                    <span class="bars">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
-                    Intermedio
-                </span>
-            </div>
-
             <div class="toc mobile">
                 <h3>En esta página</h3> <a href="#que">¿Qué es?</a> <a href="#precio">Precio</a> <a
                     href="#funcionamiento">Funcionamiento</a> <a href="#montaje">Montaje</a> <a
                     href="#codigo">Código</a>
             </div>
             <h2 id="que">¿Qué es el PCF8575?</h2>
-            
             <p> El PCF8575 es un expansor de entradas y salidas digitales de 16 bits que opera mediante el bus I2C. Su
                 principal ventaja es permitir añadir 16 GPIO adicionales utilizando únicamente dos líneas de
                 comunicación del microcontrolador, como SDA y SCL en plataformas tipo Arduino. </p>
@@ -1179,12 +1092,9 @@
                         onclick="copyCode()">Copiar</button> </div>
                 <pre><code id="code"> <span class="line"><span class="num">1</span><span class="code"><span class="kw">#include</span> &lt;<span class="lib">PCF8575.h</span>&gt;</span></span> <span class="line"><span class="num">2</span><span class="code"><span class="com">// Dirección I2C del PCF8575</span></span></span> <span class="line"><span class="num">3</span><span class="code"><span class="type">PCF8575</span> <span class="obj">pcf8575</span>(<span class="numv">0x20</span>);</span></span> <span class="line"><span class="num">4</span><span class="code"></span></span> <span class="line"><span class="num">5</span><span class="code"><span class="kw">void</span> <span class="fn">setup</span>() {</span></span> <span class="line"><span class="num">6</span><span class="code"> <span class="obj">Serial</span>.<span class="fn">begin</span>(<span class="numv">115200</span>);</span></span> <span class="line"><span class="num">7</span><span class="code"> <span class="com">// P1 como entrada (botón)</span></span></span> <span class="line"><span class="num">8</span><span class="code"> <span class="obj">pcf8575</span>.<span class="fn">pinMode</span>(<span class="obj">P1</span>, <span class="obj">INPUT</span>);</span></span> <span class="line"><span class="num">9</span><span class="code"> <span class="com">// P0 como salida (LED)</span></span></span> <span class="line"><span class="num">10</span><span class="code"> <span class="obj">pcf8575</span>.<span class="fn">pinMode</span>(<span class="obj">P0</span>, <span class="obj">OUTPUT</span>);</span></span> <span class="line"><span class="num">11</span><span class="code"> <span class="obj">pcf8575</span>.<span class="fn">begin</span>();</span></span> <span class="line"><span class="num">12</span><span class="code">}</span></span> <span class="line"><span class="num">13</span><span class="code"></span></span> <span class="line"><span class="num">14</span><span class="code"><span class="kw">void</span> <span class="fn">loop</span>() {</span></span> <span class="line"><span class="num">15</span><span class="code"> <span class="type">bool</span> <span class="obj">estado</span> = <span class="obj">pcf8575</span>.<span class="fn">digitalRead</span>(<span class="obj">P1</span>);</span></span> <span class="line"><span class="num">16</span><span class="code"> <span class="kw">if</span>(<span class="obj">estado</span> == <span class="obj">HIGH</span>) {</span></span> <span class="line"><span class="num">17</span><span class="code"> <span class="obj">pcf8575</span>.<span class="fn">digitalWrite</span>(<span class="obj">P0</span>, <span class="obj">HIGH</span>);</span></span> <span class="line"><span class="num">18</span><span class="code"> } <span class="kw">else</span> {</span></span> <span class="line"><span class="num">19</span><span class="code"> <span class="obj">pcf8575</span>.<span class="fn">digitalWrite</span>(<span class="obj">P0</span>, <span class="obj">LOW</span>);</span></span> <span class="line"><span class="num">20</span><span class="code"> }</span></span> <span class="line"><span class="num">21</span><span class="code">}</span></span> </code></pre>
             </div>
-        </div> <!-- INDICE -->
+        </div> 
         <script>
 
-            // =========================
-            // 📌 TOC DINÁMICO (SCROLL)
-            // =========================
             const sections = document.querySelectorAll("h2");
             const links = document.querySelectorAll(".toc a");
 
@@ -1210,9 +1120,7 @@
             });
 
 
-            // =========================
-            // 🔌 INTERACTIVO PINES
-            // =========================
+
             const pins = document.querySelectorAll(".pin");
             const info = document.getElementById("info");
             const led = document.querySelector(".led");
@@ -1220,18 +1128,14 @@
             pins.forEach(pin => {
                 pin.addEventListener("click", () => {
 
-                    // reset estado visual
                     pins.forEach(p => p.classList.remove("active"));
                     pin.classList.add("active");
 
-                    // datos
                     const name = pin.dataset.pin || pin.querySelector('.pin-box').innerText;
                     const desc = pin.dataset.info || "Sin descripción";
 
-                    // mostrar info
                     info.innerText = name + " → " + desc;
 
-                    // LED toggle SOLO en P1
                     if (name === "P1") {
                         led.classList.toggle("on");
                     }
@@ -1239,9 +1143,6 @@
             });
 
 
-            // =========================
-            // 📋 COPY CODE
-            // =========================
             function copyCode() {
 
                 const code = document.getElementById("code").innerText;
